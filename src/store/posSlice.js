@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const url = 'https://yibeebackend.vercel.app/feed/posts'
 export const fetchPosts = createAsyncThunk(
-    'post/getPost',
+    'posts/getPost',
     async (_, thunkAPI) => {
         try {
             const response = await axios.get(url);
@@ -16,7 +16,7 @@ export const fetchPosts = createAsyncThunk(
 )
 // A FUNCTION TO CREATE A POST AND THEN SEND IT TO THE DATABASE
 const userToken = localStorage.getItem('token');
-export const createPost = createAsyncThunk('post/createPost',
+export const createPost = createAsyncThunk('posts/createPost',
     async (formData, thunkAPI) => {
         try {
             // console.log(userToken)
@@ -33,10 +33,9 @@ export const createPost = createAsyncThunk('post/createPost',
     }
 )
 // LIKE POST
-export const Likepost = createAsyncThunk('post/createPost',
+export const Likepost = createAsyncThunk('posts/LikePost',
     async (p, thunkAPI) => {
         try {
-            console.log(userToken);
             const id = p._id;
             const response = await axios.patch((`https://yibeebackend.vercel.app/feed/update/${id}`), userToken,{
                 headers: {
@@ -50,7 +49,7 @@ export const Likepost = createAsyncThunk('post/createPost',
     }
 )
 // DELETE POSt
-export const DeletePost = createAsyncThunk('post/createPost',
+export const DeletePost = createAsyncThunk('posts/DeletePost',
     async (p, thunkAPI) => {
         try {
             const response = await axios.delete((`https://yibeebackend.vercel.app/feed/post/${p._id}`) , {
@@ -72,19 +71,17 @@ const createPostSlice = createSlice({
         isFetched: false,
         status: 'idle',
         error: null,
-        isPosted: "not yet",
+        isPosted: "Waiting....",
         isAdmin:false,
+        likedPosts: JSON.parse(localStorage.getItem("likedPosts")) || [],
+        isCreated:false 
+    },reducers:{
+            unlike:(p,state)=>{
+              console.log()
+                
+            }
     },
-    reducers: {
-    //      updateLikeCount: (state, action) => {
-    //     const updatedPost = action.payload;
-    //     const postIndex = state.posts.findIndex(post => post._id === updatedPost._id);
-    //     if (postIndex !== -1) {
-    //         state.posts[postIndex] = updatedPost; 
-    //     }
-    // },
-    }, 
-   
+
     extraReducers: (builder) => {
         builder.addCase(fetchPosts.pending, (state) => {
             state.status = "loading"
@@ -95,17 +92,47 @@ const createPostSlice = createSlice({
             state.status = 'suceeded'
             state.isFetched = !state.isFetched;
             state.posts = action.payload
-        }).addCase(createPost.pending, (state) => {
+        })
+        // createPost
+        .addCase(createPost.pending, (state) => {
             state.isPosted = "Please wait.."
         }).addCase(createPost.rejected, (state) => {
             state.isPosted = "Server Error!"
-        }).addCase(createPost.fulfilled, (state) => {
+        }).addCase(createPost.fulfilled, (state,action) => {
             state.isPosted = 'Posted'
+            state.posts.push(action.payload);
+            
         })
+        //likePosts
+        .addCase(Likepost.pending,(state)=>{
+            console.log('')
+        })
+        .addCase(Likepost.fulfilled, (state,action) => {
+            // console.log(state.posts)
+
+            const likedPostId = action.payload._id;
+            // console.log(action.payload) 
+            const isAlreadyLike = state.likedPosts.includes(likedPostId)
+        if(isAlreadyLike){
+            state.likedPosts = state.likedPosts.filter((id)=>id !== likedPostId)
+        }else{
+            state.likedPosts.push(likedPostId);
+        }
+        localStorage.setItem('likedPosts',JSON.stringify(state.likedPosts))
+        // Update the post in the `posts` array with the new like count
+        const index = state.posts.findIndex((post) => post._id === likedPostId);
+        if (index !== -1) {
+          state.posts[index] = action.payload;
+        }
+      }).addCase(DeletePost.fulfilled,(state,action)=>{
+        const deletedPost = action.payload
+        state.posts.slice(deletedPost,1)
+      })
+
     }
 
 })
-export const { setPosts } = createPostSlice.actions
+export const { setPosts ,unlike} = createPostSlice.actions
 export default createPostSlice.reducer;
 
 

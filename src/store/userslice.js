@@ -41,13 +41,13 @@ export const AddProfilePicture = createAsyncThunk(
     'user/AddProfilePic',
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.patch(`https://yibeebackend.vercel.app/account/update`,formData ,{
+            const response = await axios.patch(`https://yibeebackend.vercel.app/account/update`, formData, {
                 headers: {
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
                 }
             });
-        
+
             return response.data;
         } catch (error) {
             console.log(error);
@@ -60,13 +60,13 @@ export const AddCoverPicture = createAsyncThunk(
     'user/AddProfilePic',
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.patch(`https://yibeebackend.vercel.app/account/cover`,formData ,{
+            const response = await axios.patch(`https://yibeebackend.vercel.app/account/cover`, formData, {
                 headers: {
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
                 }
             });
-           
+
             return response.data;
         } catch (error) {
             console.log(error);
@@ -84,13 +84,17 @@ export const userSlice = createSlice({
         Situation: 'idle',
         isAdmin: false,
         playlist: null,
-        isAdded: 'not added'
+        isAdded: 'not added',
+        banner: null
     },
     reducers: {
         setUser: (state, action) => {
             state.user = action.payload;
         },
-    }, extraReducers: (builder) => {
+        
+    },
+    // getUserDetails 
+    extraReducers: (builder) => {
         builder.addCase(getUser.rejected, (state, action) => {
             state.error = action.payload;
             state.Situation = 'Rejected';
@@ -103,6 +107,7 @@ export const userSlice = createSlice({
             state.playlist = action.payload.playlist;
             state.Situation = 'Suceeded';
         })
+            // AddToPlaylist
             .addCase(AddToPlaylist.rejected, (state, action) => {
                 state.error = action.payload;
                 state.Situation = 'Rejected';
@@ -118,6 +123,18 @@ export const userSlice = createSlice({
                 console.log(action.payload.res, 'success')
                 state.Situation = 'Suceeded';
             })
+            // coverphoto
+            .addCase(AddCoverPicture.rejected, (state, action) => {
+                state.banner === "no image found"
+            })
+            .addCase(AddCoverPicture.pending, (state, action) => {
+                state.banner === "isLoading"
+            }).addCase(AddCoverPicture.fulfilled, (state, action) => {
+                state.banner === null
+            })
+        // forProfilePicture
+
+
     }
 })
 export const { setUser, AddComment, LikPost, NextPost, PrevPost } = userSlice.actions

@@ -1,60 +1,38 @@
 import { useEffect, useState, useRef } from "react";
-import { FaRegHeart, FaShareSquare, FaUser, FaComments } from "react-icons/fa";
-import { MdVerified } from "react-icons/md";
+import { FaRegHeart, FaShareSquare, FaUser, FaComments, FaArrowAltCircleRight } from "react-icons/fa";
 import { FcLike } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPosts, Likepost  } from "../store/posSlice";
-import Loader from "./Loader";
-import {io } from 'socket.io-client'
+import { fetchPosts, Likepost ,unlike} from "../store/posSlice";
+
+import LoadingCard from "./LoadingCard";
 const PostCard = () => {
-  const [likedPosts, setLikedPosts] = useState([]); // Track liked posts by their IDs
   const status = useSelector((state) => state.posts.status);
   const post = useSelector((state) => state.posts.posts);
-  const admin = useSelector((state) => state.auth.isAdmin);
+  const likedPosts = useSelector(state => state.posts.likedPosts)
   // const user = useSelector(state => state.user.user)
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     const result = JSON.parse(localStorage.getItem('likedPosts'));
-    
-   
+
+
     if (status === 'idle') {
       dispatch(fetchPosts());
     }
-    console.log(post);
   }, [dispatch, status]);
 
   const postContainer = useRef();
 
-  function handleLike(postId) {
-    // Prevent liking the same post multiple times
-    if (likedPosts.includes(postId))
-       {
-        alert('Post Already liked')
-        return;
-       }
-
-    // Update the liked posts array
-    setLikedPosts([...likedPosts, postId]);
-    localStorage.setItem('likedPosts', JSON.stringify(likedPosts));
-    // Dispatch the like action for the specific post
-    const postToLike = post.find(p => p._id === postId);
-    if (postToLike) {
-      dispatch(Likepost(postToLike));
-    }
-  }
-// if(post.length===0){
-//   console.log(`empty ${post}`)
-//   return <Loader></Loader>
-// }
+  const handleLike = (p) => {
+    dispatch(Likepost(p));
+  };
 
 
 
   return (
     <>
-      {/* bg-gradient-to-tr from-slate-800 to-slate-700 */}
-      {post ? (
+      {post.length ? (
         <div
           ref={postContainer}
           className="  gap-5 rounded-lg overflow-y-auto scroll-smooth p-4  min-w-96 h-fit  "
@@ -87,15 +65,15 @@ const PostCard = () => {
                 {/* USER INFO AND ACTION ICONS */}
                 <div className="mt-4 flex items-center justify-between px-1">
                   <div className="font-extrabold font-mono flex items-center justify-center gap-1 from-teal-300 to-cyan-300">
-                    <span>{p.author.username}</span>
-                    <span>{admin === true ? <MdVerified /> : <FaUser />}</span>
+                    <span className="flex items-center justify-center gap-1"> {p.author.username}<FaUser /></span>
+
                   </div>
                   <div className="flex items-center justify-center gap-3">
                     <span className="font-semibold text-lg flex items-center justify-center">
                       {likedPosts.includes(p._id) ? (
-                        <FcLike />
+                        <FcLike onClick={() => handleLike(p)} />
                       ) : (
-                        <FaRegHeart onClick={() => handleLike(p._id)} />
+                        <FaRegHeart onClick={() => handleLike(p)} />
                       )}
                       : {p.likes}
                     </span>
@@ -117,10 +95,12 @@ const PostCard = () => {
                 </div>
               </div>
             ))}
+              <button><FaArrowAltCircleRight/></button>
+
           </div>
-          
+
         </div>
-      ) : <Loader/>}
+      ) : <LoadingCard />}
     </>
   );
 };

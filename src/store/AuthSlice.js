@@ -53,12 +53,9 @@ const AuthSlice = createSlice({
     },
     reducers: {
         logout: (state, action) => {
-            localStorage.removeItem('token')
             state.loggedIn = false;
             state.user = null;
-        },
-        log: (state, action) => {
-            console.log('working')
+            localStorage.removeItem('token')
         }
         // SIGNUP CASES
     }, extraReducers: (builder) => {
@@ -97,5 +94,5 @@ const AuthSlice = createSlice({
 
     }
 })
-export const { signup, log } = AuthSlice.actions
+export const { signup, log,logout } = AuthSlice.actions
 export default AuthSlice.reducer;

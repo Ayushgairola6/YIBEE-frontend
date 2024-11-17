@@ -8,7 +8,7 @@ const MakePost = () => {
   return (
     <>
       {/* THE MAIN BACKGROUND CONTAINER  */}
-      <div className=" w-screen flex ">
+      <div className=" w-screen ">
         <CreatePost></CreatePost>
       </div>
     </>

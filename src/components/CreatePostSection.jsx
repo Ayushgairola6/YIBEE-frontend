@@ -2,10 +2,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { createPost } from "../store/posSlice";
 import { useState } from "react";
 import { useRef } from "react";
+import Popup from "./Popup";
+import Error from "./error";
 const CreatePost = () => {
 
   const img = useRef();
   const Posted = useSelector(state => state.posts.isPosted);
+  let isClicked = useSelector(state=>state.posts.isCreated);
   const [postData, setPostData] = useState({
     Mood: "",
     images: "",
@@ -29,13 +32,12 @@ const CreatePost = () => {
 
 
   const dispatch = useDispatch();
-
   // METHOD THAT IS CALLED WHEN FORM IS SUBMITTED
   async function HandleCreatePost(e) {
     await e.preventDefault()
     const formData = new FormData();
 
-    
+
 
     formData.append("Mood", postData.Mood);
     formData.append("title", postData.title);
@@ -49,21 +51,23 @@ const CreatePost = () => {
 
 
     dispatch(createPost(formData));
-    console.log(postData)
-  }
+     
+   
 
+  }
 
   return (
     <>
-      <form encType="multipart/form-data" onSubmit={HandleCreatePost} className="h-full w-screen flex items-center justify-center text-xl font-bold font-serif my-4 ">
+      {Posted==="Posted" ? <Popup Posted={Posted} /> : null}
+      {Posted ==="Server Error!"?<Error Posted={Posted} />:null}
+      {Posted==="Please wait.."?<Popup Posted={Posted}/> : null}
+      {/* {Posted === "Posted" ? <Popup  /> : null} */}
+      <form encType="multipart/form-data" onSubmit={HandleCreatePost} className="h-full w-screen flex  items-center justify-center text-xl font-bold font-serif my-4 ">
 
         <div className=" bg-gradien-to-r from-[#2e2e3a] to-slate-700 text-gray-200 h-full  rounded-xl p-6 w-3/4 shadow-md shadow-teal-500 ">
-          <h1 className="text-center " >
-            <span className="  shadow-md shadow-black px-3 rounded-xl text-3xl font-bold mt-4">Status :{Posted} </span>
-          </h1>
 
-          <div className="mt-6">
-            <label className="text-balck block mb-2 text-xl">Your Mood</label>
+          <div className="mt-6 ">
+            <label className=" block mb-2 text-xl">Your Mood</label>
             <select value={postData.Mood} onChange={handleChange} name='Mood'
               className=" text-black font-sm  border-blue-400 border-2 rounded-lg w-full p-2 focus:outline-none focus:ring-1 focus:ring-teal-400 shadow-md shadow-black" >
               <option disabled>
@@ -74,7 +78,7 @@ const CreatePost = () => {
               <option value="Bored">Bored</option>
               <option value="Thrilled">Thrilled</option>
               <option value="Excited">Excited</option>
-              <option value="Scared">Scared</option>
+              <option value="Scared">Tired</option>
               <option value="Uncertain">Uncertain</option>
 
             </select>
@@ -91,7 +95,7 @@ const CreatePost = () => {
               name="title"
               placeholder="Heavy rain and Arijit.."
               type="text"
-              className="  border-blue-400 border-2 rounded-lg w-full p-2 focus:outline-none focus:ring-1 focus:ring-teal-400 shadow-md shadow-black"
+              className=" text-black border-blue-400 border-2 rounded-lg w-full p-2 focus:outline-none focus:ring-1 focus:ring-teal-400 shadow-md shadow-black"
             />
           </div>
 
@@ -103,20 +107,21 @@ const CreatePost = () => {
               name="caption"
               value={postData.caption}
               onChange={handleChange}
-              placeholder="Today the mood is kinda phonkyyy...."
-              className="  border-blue-400 border-2 rounded-lg w-full p-2 h-32 focus:outline-none focus:ring-1 focus:ring-teal-400 shadow-md shadow-black"
+              placeholder="Tell the world how you feel"
+              className="text-black  border-blue-400 border-2 rounded-lg w-full p-2 h-32 focus:outline-none focus:ring-1 focus:ring-teal-400 shadow-md shadow-black"
             ></textarea>
           </div>
 
           <div className="mt-6">
             <label className=" block mb-2 text-xl">Hashtags</label>
             <input
+
               value={postData.hashtags}
               name='hashtags'
               onChange={handleChange}
               placeholder="#mood #loveIsInTheAir"
               type="text"
-              className=" border-blue-400 border-2 rounded-lg w-full p-2 focus:outline-none focus:ring-1 focus:ring-teal-400 shadow-md shadow-black"
+              className="text-black border-blue-400 border-2 rounded-lg w-full p-2 focus:outline-none focus:ring-1 focus:ring-teal-400 shadow-md shadow-black"
             />
 
           </div>

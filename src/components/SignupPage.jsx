@@ -1,15 +1,16 @@
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Signup, log } from "../store/AuthSlice";
+import { Signup } from "../store/AuthSlice";
 import { useRef, useState } from "react";
 import axios from "axios";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 const SignupPage = () => {
 
   const [empty, setEmpty] = useState(null);
-  const [AccountStatus, setStatus] = useState('In progress');
   const name = useRef();
   const mail = useRef();
   const pass = useRef();
+  const [isVisible, setIsVisible] = useState(false);
 
   const condition = useSelector(state => state.auth.condition);
   const dispatch = useDispatch()
@@ -28,24 +29,18 @@ const SignupPage = () => {
     }
     else {
       dispatch(Signup(SignupData));
-   
+
       setEmpty(null);
     }
 
-
-
+  }
+  function TogglePassword() {
+    setIsVisible(!isVisible);
   }
 
   return (
-    <form className="relative flex items-center justify-center h-full bg-gradient-to-br from-black to-gray-500 w-screen">
-      <div className="absolute right-8 top-5 flex flex-col items-center justify-center  ">
-        <span className="text-white font-semibold text-md underline  ">
-          Already have an Account
-        </span>
-        <Link to='/' className="bg-black text-center text-white font-semibold w-full text-sm p-2 rounded-lg hover:border-white hover:border-2 ">
-          login
-        </Link>
-      </div>
+    <form className=" flex flex-col-reverse gap-4 items-center justify-center h-full bg-gradient-to-br from-black to-gray-500 w-screen">
+
       <div
         className="bg-slate-300 flex items-center h-fit gap-5 font-semibold text-md border-2 border-black
       shadow-lg shadow-black  justify-between  flex-col p-3 "
@@ -76,34 +71,34 @@ const SignupPage = () => {
           />
         </div>
         {/* password field  */}
-        <div className="w-full">
+        <div className="w-full relative">
           <span className="font-bold text-md">Password</span>
           <input ref={pass}
             placeholder="xyzxx"
             className="w-full px-2 focus:border-2 focus:ring-4"
-            type="password"
+            type={!isVisible ? "password" : "text"}
           />
+          <button onClick={TogglePassword} type="button"> {isVisible === false ? <FaEye className="absolute right-3 top-7" />
+            : <FaEyeSlash className="absolute right-3 top-7" />}</button>
         </div>
 
 
         <button onClick={handleSignup} className="bg-black text-white font-semibold w-full text-sm p-2 rounded-lg shadow-md shadow-black hover:scale-105">
           Sign up with Email
         </button>
-        {/* <span>---------OR CONTINUE WITH---------</span>
-        <button className="border-2  border-gray-600 font-semibold w-full text-sm p-1 rounded-lg">
-          Github
-        </button>
-        <button className="border-2  border-gray-600 font-semibold w-full text-sm p-1 rounded-lg">
-          Google
-        </button>
-        <button className="border-2  border-gray-600 font-semibold w-full text-sm p-1 rounded-lg">
-          LinkedIn
-        </button> */}
 
         <p className="underline ">
           By clicking continue , you agree to our Terms of Service and Privacy
           Policy
         </p>
+      </div>
+      <div className=" right-8 top-5 flex flex-col items-center justify-center  ">
+        <span className="text-white font-semibold text-md underline  ">
+          Already have an Account
+        </span>
+        <Link to='/' className="bg-black text-center text-white font-semibold w-full text-sm p-2 rounded-lg hover:border-white hover:border-2 ">
+          login
+        </Link>
       </div>
     </form>
   );

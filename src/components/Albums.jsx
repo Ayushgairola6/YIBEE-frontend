@@ -48,7 +48,7 @@ const Albums = ({ categories }) => {
           onClick={() => ChooseCategory(category)}
           onMouseEnter={() => DisplayPlayButton(category)}
           onMouseLeave={HidePlayButton}
-          className="relative bg-gray-300 h-28 w-28 rounded-full flex items-center justify-center hover:border hover:border-teal-400 "
+          className="relative bg-gray-300 h-28 w-28 rounded-full flex items-center justify-center hover:border hover:border-teal-400 max-lg:h-12 max-lg:w-12"
         >
           {hoveredCategory === category.id && (
             <>

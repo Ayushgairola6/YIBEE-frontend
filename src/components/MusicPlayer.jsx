@@ -20,16 +20,16 @@ const Musicplayer = () => {
 
     <>
       {currSong ? (<>
-        {window.innerWidth <= 1000 ? <div className=" flex flex-col items-normal justify-evenly h-screen  bg-black ">
+        {window.innerWidth <= 1000 ? <div className=" h-screen">
           {/* container containing Thumbnail , progress bar , controls  */}
           <div className="p-1 shadow-sm shadow-teal-400  ">
             <Thumbnail />
             <Controls />
           </div>
-          <div >
+          
             <span className="text-white text-center flex items-center justify-center gap-1">Genre <FaHeadphones/></span>
           <ForYou/>
-          </div>
+          
         </div> :
         // For larger screens
         <div className="p-1 flex h-96 pb-3 px-1  ">

@@ -18,9 +18,15 @@ import Genre from "./components/Genre";
 import SmallNavbar from './components/ForSmallScreen/SmallNavbar'
 import SocialMedia from "./components/SocialMedia";
 import Musicplayer from "./components/MusicPlayer";
-import Controls from "./components/Controls";
+import { setUpAxiosInterCeptors } from "./store/axiosIntercepter";
+
 
 function App() {
+
+  // check if the is expired or not
+  useEffect(() => {
+    setUpAxiosInterCeptors;
+  }, [])
   const dispatch = useDispatch();
 
   // LOGIN STATE 
@@ -57,11 +63,10 @@ function App() {
         </div>
       </Router>
     )
-  } else if (LoggedInStatus === true && window.innerWidth <= 1000) {
-    console.log('small screens')
+  } else if (LoggedInStatus === true && window.innerWidth <= 800) {
     return <>
       <Router>
-        <div className="max-h-screen h-screen max-w-screen bg-black">
+        <div className="relative  bg-black">
           <SmallNavbar />
           <Routes>
             <Route path="/" element={<SocialMedia />}></Route>
@@ -69,7 +74,7 @@ function App() {
             <Route path="/Account" element={<UserAccount />}></Route>
             <Route path="/Genre" element={<Genre />}></Route>
             <Route path="/playlist" element={<YourMusic />}></Route>
-              <Route path="/musicPlayer" element={<Musicplayer />}></Route>
+            <Route path="/musicPlayer" element={<Musicplayer />}></Route>
           </Routes>
           <Footer></Footer>
 
@@ -83,7 +88,7 @@ function App() {
       <>
         {fetchStatus === true ? (<>
           <Router>
-            <div  className="scroll-smooth   font-mono  bg-black  bg-center ">
+            <div className="  relative  bg-black  ">
               <Navbar></Navbar>
               <Routes>
                 <Route path="/" element={<Home />}></Route>

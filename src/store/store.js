@@ -4,6 +4,7 @@ import MusicReducer from "./musicSlice";
 import postReducer from './posSlice';
 import authReducer from './AuthSlice'
 import ThemeReducer from './ThemeSlice'
+
 export const Appstore = configureStore({
    reducer: {
       user: userReducer,
@@ -13,3 +14,5 @@ export const Appstore = configureStore({
       theme:ThemeReducer,
    }
 })
+
+export default Appstore;

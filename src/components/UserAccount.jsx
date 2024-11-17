@@ -5,16 +5,16 @@ import { BiPlus } from "react-icons/bi";
 import Loader from "./Loader";
 import ConfirmBox from "./ConfirmationBox";
 import { MdClose } from "react-icons/md";
-
-
+import { logout } from "../store/AuthSlice";
+import {FiArrowUpRight} from "react-icons/fi"
 const UserAccount = () => {
     const [isClicked, setIsClicked] = useState(false);
     const [mouseOver, setMouseOver] = useState(false);
-    const [selectedPost ,setselectedPost] = useState(null);
-    const [hoveredPost,setHoverdPost]=useState(null);
+    const [selectedPost, setselectedPost] = useState(null);
+    const [hoveredPost, setHoverdPost] = useState(null);
     const UserImage = useRef();
     const Cover = useRef();
-    const choice = useRef();
+    const imageLoading = useSelector(state => state.user.isLoading);
     const dispatch = useDispatch()
     const User = useSelector(state => state.user.user);
     //  CALLING FOR THE USER DATA 
@@ -50,28 +50,29 @@ const UserAccount = () => {
 
 
 
-function showConfimation(post){
-    setIsClicked(true)
-    setselectedPost(post)
-}
+    function showConfimation(post) {
+        setIsClicked(true)
+        setselectedPost(post)
+    }
 
 
     return (<>
         {User ? (<>
             {/* main div */}
-            <div className="relative min-h-screen  ">
+            <div className=" min-h-screen  ">
+           
                 {/* div containing cover and profilePic */}
-                <div className=" ">
+                <div className=" h-full">
                     {/* coverPhoto div with choose and upload button */}
                     <div className=" h-40  flex items-center justify-evenly p-1 my-3">
-                        <img className="h-full w-4/5" src={User.coverPhoto} />
+                        <img className="h-full w-4/5" src={User.coverPhoto === "" ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpIAGs73zfdJhozC5nsPL36iKkN_wR8uzUNA&s" : User.coverPhoto} />
                         {/* div containing the input and button */}
                         <div className="flex flex-col items-center justify-center gap-2">
                             <label htmlFor="file-upload" className="file-upload-label inline-block w-5 h-5 rounded-full bg-green-600 text-black text-center cursor-pointer font-extrabold text-lg">
-                            <BiPlus />
+                                <BiPlus />
                                 <input ref={Cover} id="file-upload" type="file" className="bg-white text-xs file-upload-input hidden " />
                             </label>
-                            <button onClick={AddCover} className="px-1 tex-black  font-bold rounded-xl bg-green-500 ">AddCover</button>
+                            <button onClick={AddCover} className="px-1 tex-black text-xs font-bold rounded-xl bg-green-500 ">AddCover</button>
                         </div>
                     </div>
                     {/* profilePhoto div with choose and upload button ++ User Name and email below*/}
@@ -80,7 +81,7 @@ function showConfimation(post){
                         <div className="  flex flex-col items-start justify-evenly p-1">
                             <div className=" h-28 w-full flex  items-start justify-between gap-2 px-1">
                                 <div className="h-full">
-                                    <img className="h-full " src={User.image} />
+                                    <img className="h-full " src={User.image === "" ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrwcRgFA-KFW6u0wScyvZEBWMLME5WkdeCUg&s" : User.image} />
                                 </div>
                                 {/* div containing the input and button */}
                                 <div className="flex flex-col items-center justify-center gap-2">
@@ -89,45 +90,49 @@ function showConfimation(post){
                                         <input ref={UserImage} id="file-upload" type="file" className="w-24 text-xs file-upload-input hidden " />
                                     </label>
 
-                                    <button onClick={AddImage} className="px-1 tex-black  font-bold rounded-xl bg-green-500">AddProfile</button>
+                                    <button onClick={AddImage} className="px-1 tex-black  font-bold text-xs rounded-xl bg-green-500">AddProfile</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {/* div for username and email */}
+                        <div className="relative first-letter:flex flex-col items-start justify-self-center text-gray-300 ">
+                        <button onClick={()=>dispatch(logout())} className="absolute left-36 text-black font-sans bottom-12 bg-red-500 text-sm font-bold px-1 rounded-xl flex items-center justify-evenly">Logout<FiArrowUpRight/></button>
+                            <span>{User.username}</span>
+                            <span>{User.email}</span>
+                            
+                        </div>
+                    </div>
+                    {/* container for the mapped posts */}
+                    <div className="  grid grid-cols-5 gap-4 max-lg:grid-cols-3 max-lg:gap-2">
+                        {User.posts.map((post, i) => {
+                            return <>
+
+                                <div key={i} onMouseOverCapture={() => {
+                                    setMouseOver(true)
+                                    setHoverdPost(post)
+                                }} onMouseOutCapture={() => setMouseOver(false)} className=" overflow-y-auto  relative border border-teal-400 m-auto text-white flex flex-col p-1 flex-wrap max-w-52 bg-[#1e1e1e] rounded-xl  max-lg:text-xs max-lg:w-32">
+                                    {mouseOver === true && post._id === hoveredPost._id ? <span className="absolute m-auto  font-bold text-lg right-5 top-5"> <MdClose color="red" onClick={() => showConfimation(post)} /></span> : null}                                        <img className="max-h-44 max-lg:h-10 rounded-xl" src={post.images} alt="" />
+
+                                    <span className="border-t border-teal-400 font-bold">Mood:{post.Mood !== "" ? post.Mood : 'mood'}</span>
+                                    <span className="border-t border-teal-400 font-bold">title:{post.title}</span>
+
                                 </div>
 
-                            </div>
 
-                            {/* div for username and email */}
-                            <div className="flex flex-col items-start justify-self-center text-gray-300">
-                                <span>{User.username}</span><span>{User.email}</span>
-                            </div>
-                        </div>
-                        {/* container for the mapped posts */}
-                        <div className=" grid grid-cols-5 gap-4 max-lg:grid-cols-3 max-lg:gap-2">
-                            {User.posts.map((post) => {
-                                return <>
-
-                                    <div key={post._id} onMouseOverCapture={() => {setMouseOver(true)
-                                        setHoverdPost(post)
-                                    }} onMouseOutCapture={() => setMouseOver(false)} className=" relative border border-teal-400 m-auto text-white flex flex-col p-1 flex-wrap max-w-52 bg-[#1e1e1e] rounded-xl  max-lg:text-xs max-lg:w-32">
-                                        {mouseOver === true && post._id===hoveredPost._id? <span className="absolute m-auto text-yellowe font-bold text-lg right-5 top-5"> <MdClose color="red" onClick={() =>showConfimation(post) } /></span> : null}                                        <img className="max-h-44 max-lg:h-10 rounded-xl" src={post.images} alt="" />
-
-                                        <span className="border-t border-teal-400 font-bold">Mood:{post.Mood !== "" ? post.Mood : 'mood'}</span>
-                                        <span className="border-t border-teal-400 font-bold">title:{post.title}</span>
-                                        <span className="border-t border-teal-400 font-bold">caption:{post.caption}</span>
-                                    </div>
-
-
-                                </>
-                            })}
-                        </div>
-                        {isClicked===true&&selectedPost?<ConfirmBox selectedPost={selectedPost}  setIsClicked={setIsClicked}/>:null}
-
+                            </>
+                        })}
                     </div>
+                    {isClicked === true && selectedPost ? <ConfirmBox selectedPost={selectedPost} setIsClicked={setIsClicked} /> : null}
+
+
                 </div>
                 {/* div Containing posts of the user */}
                 <div>
 
                 </div>
-
-
+                
             </div>
         </>) :
             // bewlow this the else statement starts 

@@ -92,7 +92,7 @@ const YourMusic = () => {
           {/* CONTAINER TO HOLD THE SONGS ADDED BY THE USER IN HIS PLAYLIST */}
           <div className="min-h-screen max-h-screen overflow-y-auto w-full max-w-2xl   text-white font-semibold text-lg items-center justify-center no-scrollbar max-lg:text-xs">
             {playlist.map((song) => {
-              return <ul className="shadow-sm shadow-teal-600 flex items-center justify-between px-2 my-2 flex-wrap"> <span>{song.title}</span> <span>{song.artist}</span> <span>{isPlaying === true && songDetail._id === song._id ? <FaPause onClick={pause} /> : <FaPlay onClick={() => chooseSong(song)} />}</span></ul>
+              return <ul key={song._id} className="shadow-sm shadow-teal-600 flex items-center justify-between px-2 my-2 flex-wrap"> <span>{song.title}</span> <span>{song.artist}</span> <span>{isPlaying === true && songDetail._id === song._id ? <FaPause onClick={pause} /> : <FaPlay onClick={() => chooseSong(song)} />}</span></ul>
 
 
             })}

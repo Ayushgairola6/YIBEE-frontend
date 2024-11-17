@@ -14,7 +14,7 @@ const smallScreen = window.innerWidth;
 
   return (
     <>
-   <div className="bg-[#1e1e1e] bg-opacity-80 backdrop-blur-md  p-2 shadow-xl shadow-black  rounded-xl my-3 flex items-center justify-between hover:border-b hover:border-teal-400 flex-wrap gap-5 ">
+   <div className="bg-[#1e1e1e] bg-opacity-80 backdrop-blur-md  p-2 shadow-xl shadow-black  rounded-xl my-3 flex items-center justify-center hover:border-b hover:border-teal-400 flex-wrap gap-3 ">
       <Albums categories={categories} />
     </div>
     </>
