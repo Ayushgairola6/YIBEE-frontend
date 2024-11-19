@@ -7,12 +7,13 @@ export const getUser = createAsyncThunk(
     'users/getUser',
     async (_, thunkAPI) => {
         try {
-            const response = await axios.get("https://yibeebackend.vercel.app/account/data", {
+            const response = await axios.get("https://yibee.vercel.app/account/data", {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 }
             });
+            console.log(response)
             return response.data;
         } catch (error) {
             console.log(error);
@@ -24,7 +25,7 @@ export const AddToPlaylist = createAsyncThunk(
     'user/AddSong',
     async (currSong, thunkAPI) => {
         try {
-            const response = await axios.patch("https://yibeebackend.vercel.app/api/song", currSong, {
+            const response = await axios.patch("https://yibee.vercel.app/api/song", currSong, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -41,13 +42,12 @@ export const AddProfilePicture = createAsyncThunk(
     'user/AddProfilePic',
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.patch(`https://yibeebackend.vercel.app/account/update`, formData, {
+            const response = await axios.patch(`https://yibee.vercel.app/account/update`, formData, {
                 headers: {
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
                 }
             });
-
             return response.data;
         } catch (error) {
             console.log(error);
@@ -57,10 +57,10 @@ export const AddProfilePicture = createAsyncThunk(
 )
 
 export const AddCoverPicture = createAsyncThunk(
-    'user/AddProfilePic',
+    'user/CoverPic',
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.patch(`https://yibeebackend.vercel.app/account/cover`, formData, {
+            const response = await axios.patch(`https://yibee.vercel.app/account/cover`, formData, {
                 headers: {
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
@@ -85,13 +85,14 @@ export const userSlice = createSlice({
         isAdmin: false,
         playlist: null,
         isAdded: 'not added',
-        banner: null
+        banner: null,
+        profile: null
     },
     reducers: {
         setUser: (state, action) => {
             state.user = action.payload;
         },
-        
+
     },
     // getUserDetails 
     extraReducers: (builder) => {
@@ -124,16 +125,23 @@ export const userSlice = createSlice({
                 state.Situation = 'Suceeded';
             })
             // coverphoto
-            .addCase(AddCoverPicture.rejected, (state, action) => {
-                state.banner === "no image found"
-            })
+            
             .addCase(AddCoverPicture.pending, (state, action) => {
-                state.banner === "isLoading"
+                state.banner = "isLoading"
             }).addCase(AddCoverPicture.fulfilled, (state, action) => {
-                state.banner === null
-            })
-        // forProfilePicture
+                state.banner = null
+                state.user = action.payload
 
+            })
+            // forProfilePicture
+            .addCase(AddProfilePicture.pending, (state, action) => {
+                state.profile = "loading"
+            })
+            .addCase(AddProfilePicture.fulfilled, (state, action) => {
+                state.profile = null
+                state.user = action.payload
+
+            })
 
     }
 })

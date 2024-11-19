@@ -32,8 +32,8 @@ function App() {
   // LOGIN STATE 
   const LoggedInStatus = useSelector(state => state.auth.loggedIn);
   // POSTS AND SONGS FETCHED STATUS 
-  const fetchStatus = useSelector(state => state.posts.isFetched);
-  const SongStatus = useSelector(state => state.music.songfetched)
+  // const fetchStatus = useSelector(state => state.posts.isFetched);
+  // const SongStatus = useSelector(state => state.music.songfetched)
 
 
   useEffect(() => {
@@ -84,9 +84,7 @@ function App() {
   }
   else if (LoggedInStatus === true) {
     return (
-      // bg-gradient-to-r from-[#2E1A47] via-[#1B1b3A] to-[#0D1B2A]
-      <>
-        {fetchStatus === true ? (<>
+
           <Router>
             <div className="  relative  bg-black  ">
               <Navbar></Navbar>
@@ -102,9 +100,7 @@ function App() {
             </div>
 
           </Router>
-        </>) : <div className="flex items-center justify-center text-black"><Loader /></div>}
-
-      </>
+      
 
     )
   }

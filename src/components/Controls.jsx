@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useRef, useEffect, useState } from 'react';
 import { FaBackward, FaForward, FaPause, FaPlay } from 'react-icons/fa';
 import { togglePlayPause, prevSong, nextSong, fetchSongs } from '../store/musicSlice';
+import LoadingCard from './LoadingCard';
 // import { set } from 'mongoose';
 
 const Controls = () => {
@@ -81,8 +82,7 @@ const Controls = () => {
   return (
     <>
 
-
-      <div className="w-full flex items-center justify-between p-2 cursor-pointer">
+{currSong?<><div className="w-full flex items-center justify-between p-2 cursor-pointer">
         <span className="shadow-md shadow-black rounded-lg px-1 font-bold font-mono bg-gray-400">{time}</span>
         <input
           onChange={handleSeek}
@@ -117,8 +117,10 @@ const Controls = () => {
           </span>
         </div>
       </div>
-
-
+      </>
+:<LoadingCard/>
+}
+      
     </>
   );
 };

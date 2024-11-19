@@ -5,10 +5,10 @@ const ForYou = () => {
 const smallScreen = window.innerWidth;
   // a state to manage the current categories available
   const [categories, setCategories] = useState([
-    { id: 0, name: 'hip-hop', cover: "src/assets/1900x1900-000000-80-0-0.jpg" },
-    { id: 1, name: 'pop', cover: "src/assets/40fc44111ee181aaf33e8e1e800ddb6e.jpg" },
-    { id: 2, name: 'rock', cover: "src/assets/HD-wallpaper-arjith-singh-bollywood-singer_63aabf4433151.jpg" },
-    { id: 3, name: 'phonk', cover: '' },
+    { id: 0, name: 'hip-hop', cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQL2iTNbdMs1pvR5DQJ_g3otFh7JkQrZsaZbw&s" },
+    { id: 1, name: 'pop', cover: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuIFZP7MJvMV87ih8Yusge2hGZyhNIJrfmRA&s" },
+    { id: 2, name: 'rock', cover: "https://i1.sndcdn.com/artworks-000102769935-nkultb-t500x500.jpg" },
+    { id: 3, name: 'phonk', cover: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0TB2bmJm8xRCxwkGU8A4VcT-noCIfzpVtcQ&s' },
     
   ]);
 

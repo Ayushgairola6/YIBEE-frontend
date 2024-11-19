@@ -75,7 +75,7 @@ const Genre = () => {
                     </div>
                 })}
                 {/* the progress bar */}
-                <div className=" flex items-center justify-evenly px-2  cursor-pointer absolute bottom-0 left-5 bg-gradient-to-r from-green-300 via-emerald-300 to-teal-300 w-full  overflow-x-hidden ">
+                <div className="w-screen flex items-center justify-evenly   cursor-pointer absolute bottom-0 left-0 bg-gray-500   ">
                     <span className="shadow-md shadow-black rounded-lg px-1 bg-gray-400">{time}</span>
                     <input 
                         onChange={handleSeek}
@@ -86,7 +86,7 @@ const Genre = () => {
                         step="0.01"
                         className="w-2/3 appearance-none h-1  shadow-black shadow-md rounded-md cursor-pointer bg-black"
                     />
-                    <img src={chosenSong.thumbnail} className="h-14 w-14 rounded-full border border-teal-400" alt="" />
+                    <img src={chosenSong.thumbnail} className="animate-spin-slow h-14 w-14 rounded-full border border-teal-400" alt="" />
                     <audio onEnded={() => handleEnd()} src={chosenSong.url} ref={audioRef}>
                         <source src={chosenSong.url} type="audio/mpeg" />
                     </audio>

@@ -2,19 +2,17 @@ import { useEffect, useState, useRef } from "react";
 import { FaRegHeart, FaShareSquare, FaUser, FaComments, FaArrowAltCircleRight } from "react-icons/fa";
 import { FcLike } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPosts, Likepost ,unlike} from "../store/posSlice";
+import { fetchPosts, Likepost, unlike } from "../store/posSlice";
 
 import LoadingCard from "./LoadingCard";
 const PostCard = () => {
   const status = useSelector((state) => state.posts.status);
   const post = useSelector((state) => state.posts.posts);
+  const liked = useSelector(state => state.posts.likedCalled);
   const likedPosts = useSelector(state => state.posts.likedPosts)
-  // const user = useSelector(state => state.user.user)
-
   const dispatch = useDispatch();
-
   useEffect(() => {
-    const result = JSON.parse(localStorage.getItem('likedPosts'));
+
 
 
     if (status === 'idle') {
@@ -29,10 +27,12 @@ const PostCard = () => {
   };
 
 
+  
+
 
   return (
     <>
-      {post.length ? (
+      {post.length>0 ? (
         <div
           ref={postContainer}
           className="  gap-5 rounded-lg overflow-y-auto scroll-smooth p-4  min-w-96 h-fit  "
@@ -70,10 +70,13 @@ const PostCard = () => {
                   </div>
                   <div className="flex items-center justify-center gap-3">
                     <span className="font-semibold text-lg flex items-center justify-center">
+                      { }
                       {likedPosts.includes(p._id) ? (
-                        <FcLike onClick={() => handleLike(p)} />
+                        liked === "wait" ? ".." :
+                          <FcLike onClick={() => handleLike(p)} />
                       ) : (
-                        <FaRegHeart onClick={() => handleLike(p)} />
+                        liked === "wait" ? ".." :
+                          <FaRegHeart onClick={() => handleLike(p)} />
                       )}
                       : {p.likes}
                     </span>
@@ -95,9 +98,9 @@ const PostCard = () => {
                 </div>
               </div>
             ))}
-              <button><FaArrowAltCircleRight/></button>
 
           </div>
+        
 
         </div>
       ) : <LoadingCard />}

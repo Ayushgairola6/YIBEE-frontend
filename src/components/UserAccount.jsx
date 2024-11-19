@@ -6,15 +6,21 @@ import Loader from "./Loader";
 import ConfirmBox from "./ConfirmationBox";
 import { MdClose } from "react-icons/md";
 import { logout } from "../store/AuthSlice";
-import {FiArrowUpRight} from "react-icons/fi"
+import { FiArrowUpRight } from "react-icons/fi"
+import LoadingImage from "./LoadingImage";
 const UserAccount = () => {
     const [isClicked, setIsClicked] = useState(false);
     const [mouseOver, setMouseOver] = useState(false);
     const [selectedPost, setselectedPost] = useState(null);
     const [hoveredPost, setHoverdPost] = useState(null);
+    const [profilePreview, setProfilePreview] = useState(null)
+    const [CoverPreview, setCoverPreview] = useState(null)
+
     const UserImage = useRef();
     const Cover = useRef();
-    const imageLoading = useSelector(state => state.user.isLoading);
+    const ProfileLoading = useSelector(state => state.user.profile);
+    const CoverLoading = useSelector(state => state.user.banner);
+
     const dispatch = useDispatch()
     const User = useSelector(state => state.user.user);
     //  CALLING FOR THE USER DATA 
@@ -25,26 +31,26 @@ const UserAccount = () => {
 
     async function AddImage() {
         const formData = new FormData();
-        if (UserImage.current.files[0] === "") {
-            alert("This field can not be empty")
-            return;
-        }
+
+        // if (!UserImage.current.files[0]) {
+        //     alert("This field can not be empty")
+        //     return;
+        // }
         formData.append('ProfilePictures', UserImage.current.files[0])
-        await dispatch(AddProfilePicture(formData));
-        await dispatch(getUser());
+        dispatch(AddProfilePicture(formData));
+        setProfilePreview(null)
 
     }
 
     async function AddCover() {
         const formData = new FormData();
-        if (Cover.current.files[0] === "") {
-            alert('This field can not be empty')
-            return;
-        }
-        console.log(formData);
+        // if (!Cover.current.files[0]) {
+        //     alert('This field can not be empty')
+        //     return;
+        // }
         formData.append('CoverPhotos', Cover.current.files[0])
-        await dispatch(AddCoverPicture(formData));
-        await dispatch(getUser());
+        dispatch(AddCoverPicture(formData));
+        setCoverPreview(null);
 
     }
 
@@ -56,24 +62,60 @@ const UserAccount = () => {
     }
 
 
+    function handleFilePreview(file, setPreview) {
+        if (!file) {
+            alert("Please select a valid image file");
+            setPreview(null); // Reset preview if no file
+            return;
+        }
+
+        // Create a FileReader to read the file
+        const reader = new FileReader();
+        reader.onload = () => {
+            setPreview(reader.result); // Set preview to the file's base64 string
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function ImagePreview(e) {
+        const file = e.target.files[0];
+
+        // Check if the input matches the profile or cover image
+        if (file && e.target === UserImage.current) {
+            handleFilePreview(file, setProfilePreview);
+        } else if (file && e.target === Cover.current) {
+            handleFilePreview(file, setCoverPreview);
+        } else {
+            setProfilePreview(null);
+            setCoverPreview(null);
+        }
+    }
+
+
+
+
+
     return (<>
         {User ? (<>
             {/* main div */}
             <div className=" min-h-screen  ">
-           
+
                 {/* div containing cover and profilePic */}
                 <div className=" h-full">
                     {/* coverPhoto div with choose and upload button */}
                     <div className=" h-40  flex items-center justify-evenly p-1 my-3">
-                        <img className="h-full w-4/5" src={User.coverPhoto === "" ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpIAGs73zfdJhozC5nsPL36iKkN_wR8uzUNA&s" : User.coverPhoto} />
+                        {CoverLoading === "isLoading" ? <LoadingImage /> : <img className="h-full w-4/5" src={User.coverPhoto === "" ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpIAGs73zfdJhozC5nsPL36iKkN_wR8uzUNA&s" : User.coverPhoto} />}
                         {/* div containing the input and button */}
                         <div className="flex flex-col items-center justify-center gap-2">
-                            <label htmlFor="file-upload" className="file-upload-label inline-block w-5 h-5 rounded-full bg-green-600 text-black text-center cursor-pointer font-extrabold text-lg">
+                            {CoverPreview !== null ? <img className="h-10 w-10" src={CoverPreview} alt="" /> : null}
+
+                            <label htmlFor="cover-upload" className="file-upload-label inline-block w-5 h-5 rounded-full bg-green-600 text-black text-center cursor-pointer font-extrabold text-lg">
                                 <BiPlus />
-                                <input ref={Cover} id="file-upload" type="file" className="bg-white text-xs file-upload-input hidden " />
+                                <input onChange={ImagePreview} ref={Cover} id="cover-upload" type="file" className="bg-white text-xs file-upload-input hidden " />
                             </label>
-                            <button onClick={AddCover} className="px-1 tex-black text-xs font-bold rounded-xl bg-green-500 ">AddCover</button>
+                            <button onClick={AddCover} className="px-1 tex-black text-xs font-bold hover:rounded-xl bg-green-600 hover:scale-105 hover:bg-green-400">AddCover</button>
                         </div>
+
                     </div>
                     {/* profilePhoto div with choose and upload button ++ User Name and email below*/}
                     <div className="  flex flex-col items-normal justify-center gap-2  my-3">
@@ -81,27 +123,30 @@ const UserAccount = () => {
                         <div className="  flex flex-col items-start justify-evenly p-1">
                             <div className=" h-28 w-full flex  items-start justify-between gap-2 px-1">
                                 <div className="h-full">
-                                    <img className="h-full " src={User.image === "" ? "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrwcRgFA-KFW6u0wScyvZEBWMLME5WkdeCUg&s" : User.image} />
+                                    {ProfileLoading === "loading" ? <img className="bg-cover bg-center  h-full" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToK4qEfbnd-RN82wdL2awn_PMviy_pelocqQ&s" alt="" /> : <img className="h-full " src={User.image} />}
                                 </div>
                                 {/* div containing the input and button */}
                                 <div className="flex flex-col items-center justify-center gap-2">
-                                    <label htmlFor="file-upload" className="file-upload-label inline-block w-5 h-5 rounded-full bg-green-600 text-black text-center cursor-pointer font-extrabold text-lg">
+                                    {profilePreview !== null ? <img className="h-10 w-10" src={profilePreview} alt="" /> : null}
+
+                                    <label htmlFor="profile-upload" className="file-upload-label inline-block w-5 h-5 rounded-full bg-green-600 text-black text-center cursor-pointer font-extrabold text-lg">
                                         <BiPlus />
-                                        <input ref={UserImage} id="file-upload" type="file" className="w-24 text-xs file-upload-input hidden " />
+                                        <input onChange={ImagePreview} ref={UserImage} id="profile-upload" type="file" className="bg-white text-xs file-upload-input hidden " />
                                     </label>
 
-                                    <button onClick={AddImage} className="px-1 tex-black  font-bold text-xs rounded-xl bg-green-500">AddProfile</button>
+                                    <button onClick={AddImage} className="px-1 tex-black  font-bold text-xs hover:scale-105 bg-green-600 hover:rounded-xl hover:bg-green-400">AddProfile</button>
                                 </div>
                             </div>
 
                         </div>
 
                         {/* div for username and email */}
-                        <div className="relative first-letter:flex flex-col items-start justify-self-center text-gray-300 ">
-                        <button onClick={()=>dispatch(logout())} className="absolute left-36 text-black font-sans bottom-12 bg-red-500 text-sm font-bold px-1 rounded-xl flex items-center justify-evenly">Logout<FiArrowUpRight/></button>
-                            <span>{User.username}</span>
-                            <span>{User.email}</span>
-                            
+                        <div className="relative pl-2 text-gray-300 ">
+                            <button onClick={() => dispatch(logout())} className="absolute left-36 text-black font-sans bottom-12 bg-red-500 text-sm font-bold px-1 rounded-xl flex items-center justify-evenly">Logout<FiArrowUpRight /></button>
+                            <div className="flex flex-col">
+                                <span>{User.username}</span>
+                                <span>{User.email}</span>
+                            </div>
                         </div>
                     </div>
                     {/* container for the mapped posts */}
@@ -132,7 +177,7 @@ const UserAccount = () => {
                 <div>
 
                 </div>
-                
+
             </div>
         </>) :
             // bewlow this the else statement starts 

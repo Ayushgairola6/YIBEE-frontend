@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const url = "https://yibeebackend.vercel.app/api/songs";
+const url = "https://yibee.vercel.app/api/songs";
 
 export const fetchSongs = createAsyncThunk(
     'songs/fetchSongs',
@@ -20,7 +20,7 @@ export const fetchGenre = createAsyncThunk(
     'songs/fetchCategory',
     async (genre, thunkAPI) => {
         try {
-            const response = await axios.get(`https://yibeebackend.vercel.app/api/genre/${genre}`);
+            const response = await axios.get(`https://yibee.vercel.app/api/genre/${genre}`);
 
             return response.data;
         } catch (error) {

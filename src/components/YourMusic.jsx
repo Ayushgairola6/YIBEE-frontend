@@ -87,10 +87,10 @@ const YourMusic = () => {
       {playlist ? (<>
 
 
-        <div className="h-full w-full flex items-center justify-between px-5   overflow-x-hidden">
+        <div className="h-full w-full flex items-center justify-between px-3   overflow-x-hidden">
 
           {/* CONTAINER TO HOLD THE SONGS ADDED BY THE USER IN HIS PLAYLIST */}
-          <div className="min-h-screen max-h-screen overflow-y-auto w-full max-w-2xl   text-white font-semibold text-lg items-center justify-center no-scrollbar max-lg:text-xs">
+          <div className="min-h-screen max-h-screen overflow-y-auto w-full max-w-2xl  shadow-sm shadow-teal-500 text-white font-semibold text-lg items-center justify-center no-scrollbar max-lg:text-xs  ">
             {playlist.map((song) => {
               return <ul key={song._id} className="shadow-sm shadow-teal-600 flex items-center justify-between px-2 my-2 flex-wrap"> <span>{song.title}</span> <span>{song.artist}</span> <span>{isPlaying === true && songDetail._id === song._id ? <FaPause onClick={pause} /> : <FaPlay onClick={() => chooseSong(song)} />}</span></ul>
 
@@ -100,7 +100,7 @@ const YourMusic = () => {
 
           </div>
           {/* CONTAINER TO DISPLAY THE IMAGE AND DATA OF THE SONG THATS IS BEING PLAYED */}
-          <div className="p-2 flex flex-col m-auto max-w-64 items-center  justify-center gap-5 rounded-2xl shadow-md shadow-teal-400 max-lg:w-32  max-lg:h-fit max-lg:gap-1 max-lg:text-xs max-lg:p-1">
+          <div className="p-2 flex flex-col m-auto max-w-64 items-center  justify-center gap-5 rounded-2xl shadow-md shadow-teal-400 max-lg:w-24  max-lg:h-fit max-lg:gap-1 max-lg:text-xs max-lg:p-1">
             <div className="h-32 w-32 max-lg:h-20 max-lg:w-20">
               <img className="h-full w-full bg-black rounded-xl border-b border-teal-400 " src={songDetail.thumbnail} alt="" />
             </div>
@@ -108,7 +108,7 @@ const YourMusic = () => {
             <div className="flex flex-col items-center justify-center gap-1 text-white font-bold text-md  p-2">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-300 to-cyan-400 border-b-2 border-b-teal-300"><span className="text-white">Title :</span>{songDetail.title}</span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-300 to-cyan-400 flex-wrap border-b-2 border-b-teal-300"><span className="text-white">Artist :</span>{songDetail.artist}</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-300 to-cyan-400 border-b-2 border-b-teal-300"><span className="text-white">Album :</span>{songDetail.album === '' ? "Not an album" : songDetail.album}</span>
+              
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-300 to-cyan-400 border-b-2 border-b-teal-300"><span className="text-white">Streams : </span>{songDetail.streams}</span>
               {/* the progress bar */}
               <div className="w-full flex items-center justify-between p-2 cursor-pointer ">

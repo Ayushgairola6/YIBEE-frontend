@@ -1,13 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const url = 'https://yibeebackend.vercel.app/feed/posts'
+const userToken = localStorage.getItem('token');
+const url = 'https://yibee.vercel.app/feed/posts?page={}'
 export const fetchPosts = createAsyncThunk(
     'posts/getPost',
-    async (_, thunkAPI) => {
+    async (_, thunkAPI,page) => {
         try {
-            const response = await axios.get(url);
-            // console.log(response.data)
+            const response = await axios.get((`https://yibee.vercel.app/feed/posts`),{
+                headers:{
+                    'Authorization': `Bearer ${userToken}`
+                }
+            })
+           
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -15,12 +20,10 @@ export const fetchPosts = createAsyncThunk(
     }
 )
 // A FUNCTION TO CREATE A POST AND THEN SEND IT TO THE DATABASE
-const userToken = localStorage.getItem('token');
 export const createPost = createAsyncThunk('posts/createPost',
     async (formData, thunkAPI) => {
         try {
-            // console.log(userToken)
-            const response = await axios.post(('https://yibeebackend.vercel.app/feed/newpost'), formData, {
+            const response = await axios.post(('https://yibee.vercel.app/feed/newpost'), formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${userToken}`
@@ -37,7 +40,7 @@ export const Likepost = createAsyncThunk('posts/LikePost',
     async (p, thunkAPI) => {
         try {
             const id = p._id;
-            const response = await axios.patch((`https://yibeebackend.vercel.app/feed/update/${id}`), userToken,{
+            const response = await axios.patch((`https://yibee.vercel.app/feed/update/${id}`), userToken, {
                 headers: {
                     'Authorization': `Bearer ${userToken}`
                 }
@@ -52,7 +55,7 @@ export const Likepost = createAsyncThunk('posts/LikePost',
 export const DeletePost = createAsyncThunk('posts/DeletePost',
     async (p, thunkAPI) => {
         try {
-            const response = await axios.delete((`https://yibeebackend.vercel.app/feed/post/${p._id}`) , {
+            const response = await axios.delete((`https://yibee.vercel.app/feed/post/${p._id}`), {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${userToken}`
@@ -72,14 +75,15 @@ const createPostSlice = createSlice({
         status: 'idle',
         error: null,
         isPosted: "Waiting....",
-        isAdmin:false,
+        isAdmin: false,
         likedPosts: JSON.parse(localStorage.getItem("likedPosts")) || [],
-        isCreated:false 
-    },reducers:{
-            unlike:(p,state)=>{
-              console.log()
-                
-            }
+        isCreated: false,
+        likedCalled: null,
+    }, reducers: {
+        unlike: (p, state) => {
+            console.log()
+
+        }
     },
 
     extraReducers: (builder) => {
@@ -93,46 +97,48 @@ const createPostSlice = createSlice({
             state.isFetched = !state.isFetched;
             state.posts = action.payload
         })
-        // createPost
-        .addCase(createPost.pending, (state) => {
-            state.isPosted = "Please wait.."
-        }).addCase(createPost.rejected, (state) => {
-            state.isPosted = "Server Error!"
-        }).addCase(createPost.fulfilled, (state,action) => {
-            state.isPosted = 'Posted'
-            state.posts.push(action.payload);
-            
-        })
-        //likePosts
-        .addCase(Likepost.pending,(state)=>{
-            console.log('')
-        })
-        .addCase(Likepost.fulfilled, (state,action) => {
-            // console.log(state.posts)
+            // createPost
+            .addCase(createPost.pending, (state) => {
+                state.isPosted = "Please wait.."
+            }).addCase(createPost.rejected, (state) => {
+                state.isPosted = "Server Error!"
+            }).addCase(createPost.fulfilled, (state, action) => {
+                state.isPosted = 'Posted'
+                state.posts.push(action.payload);
 
-            const likedPostId = action.payload._id;
-            // console.log(action.payload) 
-            const isAlreadyLike = state.likedPosts.includes(likedPostId)
-        if(isAlreadyLike){
-            state.likedPosts = state.likedPosts.filter((id)=>id !== likedPostId)
-        }else{
-            state.likedPosts.push(likedPostId);
-        }
-        localStorage.setItem('likedPosts',JSON.stringify(state.likedPosts))
-        // Update the post in the `posts` array with the new like count
-        const index = state.posts.findIndex((post) => post._id === likedPostId);
-        if (index !== -1) {
-          state.posts[index] = action.payload;
-        }
-      }).addCase(DeletePost.fulfilled,(state,action)=>{
-        const deletedPost = action.payload
-        state.posts.slice(deletedPost,1)
-      })
+            })
+            //likePosts
+            .addCase(Likepost.pending, (state) => {
+                console.log('')
+                state.likedCalled = "wait"
+
+            })
+            .addCase(Likepost.fulfilled, (state, action) => {
+                // console.log(state.posts)
+                state.likedCalled = null
+                const likedPostId = action.payload._id;
+                // console.log(action.payload) 
+                const isAlreadyLike = state.likedPosts.includes(likedPostId)
+                if (isAlreadyLike) {
+                    state.likedPosts = state.likedPosts.filter((id) => id !== likedPostId)
+                } else {
+                    state.likedPosts.push(likedPostId);
+                }
+                localStorage.setItem('likedPosts', JSON.stringify(state.likedPosts))
+                // Update the post in the `posts` array with the new like count
+                const index = state.posts.findIndex((post) => post._id=== likedPostId);
+                if (index !== -1) {
+                    state.posts[index] = action.payload;
+                }
+            }).addCase(DeletePost.fulfilled, (state, action) => {
+                const deletedPost = action.payload
+                state.posts.slice(deletedPost, 1)
+            })
 
     }
 
 })
-export const { setPosts ,unlike} = createPostSlice.actions
+export const { setPosts, unlike } = createPostSlice.actions
 export default createPostSlice.reducer;
 
 

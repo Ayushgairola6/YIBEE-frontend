@@ -48,7 +48,7 @@ const Albums = ({ categories }) => {
           onClick={() => ChooseCategory(category)}
           onMouseEnter={() => DisplayPlayButton(category)}
           onMouseLeave={HidePlayButton}
-          className="relative bg-gray-300 h-28 w-28 rounded-full flex items-center justify-center hover:border hover:border-teal-400 max-lg:h-12 max-lg:w-12"
+          className="relative bg-gray-300 h-28 w-28 rounded-full flex items-center justify-center hover:border hover:border-teal-400 max-lg:h-20 max-lg:w-20 max-lg:text-xs"
         >
           {hoveredCategory === category.id && (
             <>
@@ -68,7 +68,7 @@ const Albums = ({ categories }) => {
             </>
           )}
           <img
-            className="rounded-full h-full w-full"
+            className="rounded-full h-full w-full "
             src={category.cover}
             alt="for u"
           />
