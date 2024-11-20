@@ -59,6 +59,9 @@ const SignupPage = () => {
             placeholder="Nameexample@gmail.com"
             className="w-full px-2 focus:border-2 focus:ring-4"
             type="text"
+            pattern="^\S*$"
+            title="no spaces allowed"
+            required
           />
         </div>
         {/* Email fiels */}
@@ -68,6 +71,9 @@ const SignupPage = () => {
             placeholder="Nameexample@gmail.com"
             className="w-full px-2 focus:border-2 focus:ring-4"
             type="text"
+            pattern="^\S*$"
+            title="no spaces allowed"
+            required
           />
         </div>
         {/* password field  */}
@@ -77,6 +83,9 @@ const SignupPage = () => {
             placeholder="xyzxx"
             className="w-full px-2 focus:border-2 focus:ring-4"
             type={!isVisible ? "password" : "text"}
+            pattern="^\S*$"
+            title="no spaces allowed"
+            required
           />
           <button onClick={TogglePassword} type="button"> {isVisible === false ? <FaEye className="absolute right-3 top-7" />
             : <FaEyeSlash className="absolute right-3 top-7" />}</button>

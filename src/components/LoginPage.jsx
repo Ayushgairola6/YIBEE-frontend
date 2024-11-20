@@ -22,9 +22,9 @@ const Login = () => {
       password: pass.current.value,
     }
     if (mail.current.value === "" || pass.current.value === "") {
-      setTimeout(() => {
+      
         setEmpty("All fields are mandatory");
-      }, 1000)
+      
       return;
     }
     dispatch(LoginRqst(LoginData));
@@ -57,6 +57,9 @@ const Login = () => {
               placeholder="Nameexample@gmail.com"
               className="w-full px-2 focus:border-2 focus:ring"
               type="email"
+               pattern="^\S*$"
+              title="no spaces allowed"
+              required
             />
           </div>
           <div className="w-full relative ">
@@ -65,6 +68,9 @@ const Login = () => {
               placeholder="must contain special characters"
               className=" w-full px-2 focus:border-2 focus:ring flex items-center justify-between "
               type={!isVisible?"password":"text"}
+              pattern="^\S*$"
+              title="no spaces allowed"
+              required
             />
             <button onClick={TogglePassword} type="button"> {isVisible === false ? <FaEye  className="absolute right-3 top-7" />
               : <FaEyeSlash className="absolute right-3 top-7" />}</button>

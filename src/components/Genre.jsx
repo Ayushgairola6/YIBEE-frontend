@@ -65,17 +65,17 @@ const Genre = () => {
 
     return <>
         {genre ? <>
-            <h1 className="text-cyan-400 text-xl font-bold font-serif text-center flex items-center justify-center gap-1 relative mb-2">Your favorite Genre <FaHeadphones /></h1>
-            <div className="relative  min-h-screen  overflow-y-auto max-w-screen px-4    text-white font-semibold text-lg items-center justify-center no-scrollbar border">
+            <h1 className="text-cyan-400 text-xl font-bold font-serif text-center flex items-center justify-center gap-1 relative mb-2 ">Your favorite Genre <FaHeadphones /></h1>
+            <div className="relative  min-h-screen  overflow-y-auto max-w-screen px-4    text-white font-semibold text-lg items-center justify-center hide-scrollbar ">
 
                 {genre.map((song) => {
-                    return <div key={song._id} className="">
+                    return <div key={song._id} className=""> 
                         <ul className="shadow-sm shadow-teal-600 flex items-center justify-between px-2 my-2 flex-wrap"> <span>{song.title}</span> <span>{song.artist}</span> <span >
                             {isPlaying === true && chosenSong._id === song._id ? <FaPause onClick={PauseSong} /> : <FaPlay onClick={() => ChooseSong(song)} />}</span></ul>
                     </div>
                 })}
                 {/* the progress bar */}
-                <div className="w-screen flex items-center justify-evenly   cursor-pointer absolute bottom-0 left-0 bg-gray-500   ">
+                <div className="w-full flex items-center justify-evenly   cursor-pointer absolute bottom-0 left-0 bg-gray-500   ">
                     <span className="shadow-md shadow-black rounded-lg px-1 bg-gray-400">{time}</span>
                     <input 
                         onChange={handleSeek}

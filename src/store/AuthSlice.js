@@ -6,7 +6,7 @@ export const Signup = createAsyncThunk(
     'post/signupRqst',
     async (SignupData, thunkAPI) => {
         try {
-            const response = await axios.post('https://yibee.vercel.app/signup', SignupData, {
+            const response = await axios.post('https://yibee.vercel.app/api/signup', SignupData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -23,7 +23,7 @@ export const LoginRqst = createAsyncThunk(
     'post/loginRqst',
     async (LoginData, thunkAPI) => {
         try {
-            const response = await axios.post('https://yibee.vercel.app/login', LoginData, {
+            const response = await axios.post('https://yibee.vercel.app/api/login', LoginData, {
                 headers: {
                     'Content-Type': 'application/json',
 
