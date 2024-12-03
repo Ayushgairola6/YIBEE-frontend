@@ -1,13 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const url = "https://yibee.vercel.app/api/music/songs";
 
 export const fetchSongs = createAsyncThunk(
     'songs/fetchSongs',
     async (_, thunkAPI) => {
         try {
-            const response = await axios.get(url);
+            const response = await axios.get("https://yibee.vercel.app/music/songs");
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -20,7 +19,7 @@ export const fetchGenre = createAsyncThunk(
     'songs/fetchCategory',
     async (genre, thunkAPI) => {
         try {
-            const response = await axios.get(`https://yibee.vercel.app/api/music/genre/${genre}`);
+            const response = await axios.get(`https://yibee.vercel.app/music/genre/${genre}`);
 
             return response.data;
         } catch (error) {
