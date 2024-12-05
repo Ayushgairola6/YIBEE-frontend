@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
-"http://localhost:8080/signup"
+"https://yibee.vercel.app/signup"
 // SIGNUP REQUEST TO THE SERVER
 export const Signup = createAsyncThunk(
     'post/signupRqst',
@@ -11,6 +11,7 @@ export const Signup = createAsyncThunk(
                     'Content-Type': 'application/json'
                 }
             });
+            console.log(response.data)
             return response.data;
         } catch (err) {
             return thunkAPI.rejectWithValue(err.response.data);

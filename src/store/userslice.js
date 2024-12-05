@@ -42,7 +42,7 @@ export const AddProfilePicture = createAsyncThunk(
     'user/AddProfilePic',
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.patch(`https://yibee.vercel.appaccount/update`, formData, {
+            const response = await axios.patch(`https://yibee.vercel.app/account/update`, formData, {
                 headers: {
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`

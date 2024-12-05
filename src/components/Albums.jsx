@@ -37,6 +37,11 @@ const Albums = ({ categories }) => {
       console.log(genre)
       await dispatch(fetchGenre(genre))
       return;
+    }else if(category.name==='phonk'){
+      const genre = category.name;
+      console.log(genre)
+      await dispatch(fetchGenre(genre))
+      return;
     }
   }
 

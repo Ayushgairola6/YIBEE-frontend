@@ -14,7 +14,7 @@ export const fetchSongs = createAsyncThunk(
     }
 );
 
-
+// fetch a specific genre
 export const fetchGenre = createAsyncThunk(
     'songs/fetchCategory',
     async (genre, thunkAPI) => {
@@ -27,7 +27,18 @@ export const fetchGenre = createAsyncThunk(
         }
     }
 );
-
+// Uploading songs to the database
+// export const UploadSong = createAsyncThunk(
+//     'songs/UploadMusic',
+//     async (genre, thunkAPI) => {
+//         try {
+            
+//             return response.data;
+//         } catch (error) {
+//             return thunkAPI.rejectWithValue(error.response.data);
+//         }
+//     }
+// );
 
 const initialState = {
     fetchedSongs :[],
