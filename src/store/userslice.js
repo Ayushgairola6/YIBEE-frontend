@@ -7,7 +7,7 @@ export const getUser = createAsyncThunk(
     'users/getUser',
     async (_, thunkAPI) => {
         try {
-            const response = await axios.get("https://yibee.vercel.app/account/data", {
+            const response = await axios.get("https://yibee.vercel.app/account/data",{withCredentials: true}, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -25,7 +25,7 @@ export const AddToPlaylist = createAsyncThunk(
     'user/AddSong',
     async (currSong, thunkAPI) => {
         try {
-            const response = await axios.patch("https://yibee.vercel.app/music/song", currSong, {
+            const response = await axios.patch("https://yibee.vercel.app/music/song",{withCredentials: true},currSong, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -42,7 +42,7 @@ export const AddProfilePicture = createAsyncThunk(
     'user/AddProfilePic',
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.patch(`https://yibee.vercel.app/account/update`, formData, {
+            const response = await axios.patch(`https://yibee.vercel.app/account/update`,{withCredentials: true}, formData, {
                 headers: {
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
@@ -60,7 +60,7 @@ export const AddCoverPicture = createAsyncThunk(
     'user/CoverPic',
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.patch(`https://yibee.vercel.app/account/cover`, formData, {
+            const response = await axios.patch(`https://yibee.vercel.app/account/cover`,{withCredentials: true}, formData, {
                 headers: {
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`

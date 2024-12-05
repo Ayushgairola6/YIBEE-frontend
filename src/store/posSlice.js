@@ -7,7 +7,7 @@ export const fetchPosts = createAsyncThunk(
     'posts/getPost',
     async (_, thunkAPI,page) => {
         try {
-            const response = await axios.get((`https://yibee.vercel.app/feed/posts`),{
+            const response = await axios.get((`https://yibee.vercel.app/feed/posts`,{withCredentials: true}),{
                 headers:{
                     'Authorization': `Bearer ${userToken}`
                 }
@@ -23,7 +23,7 @@ export const fetchPosts = createAsyncThunk(
 export const createPost = createAsyncThunk('posts/createPost',
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.post(('https://yibee.vercel.app/feed/newpost'), formData, {
+            const response = await axios.post(('https://yibee.vercel.app/feed/newpost' ,{withCredentials: true}), formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${userToken}`
@@ -40,7 +40,7 @@ export const Likepost = createAsyncThunk('posts/LikePost',
     async (p, thunkAPI) => {
         try {
             const id = p._id;
-            const response = await axios.patch((`https://yibee.vercel.app/feed/update/${id}`), userToken, {
+            const response = await axios.patch((`https://yibee.vercel.app/feed/update/${id}`,{withCredentials: true}), userToken, {
                 headers: {
                     'Authorization': `Bearer ${userToken}`
                 }
@@ -55,7 +55,7 @@ export const Likepost = createAsyncThunk('posts/LikePost',
 export const DeletePost = createAsyncThunk('posts/DeletePost',
     async (p, thunkAPI) => {
         try {
-            const response = await axios.delete((`https://yibee.vercel.app/feed/post/${p._id}`), {
+            const response = await axios.delete((`https://yibee.vercel.app/feed/post/${p._id}`,{withCredentials: true}), {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${userToken}`

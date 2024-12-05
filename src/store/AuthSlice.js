@@ -6,7 +6,7 @@ export const Signup = createAsyncThunk(
     'post/signupRqst',
     async (SignupData, thunkAPI) => {
         try {
-            const response = await axios.post('https://yibee.vercel.app/auth/signup', SignupData, {
+            const response = await axios.post('https://yibee.vercel.app/auth/signup', {withCredentials: true}, SignupData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
