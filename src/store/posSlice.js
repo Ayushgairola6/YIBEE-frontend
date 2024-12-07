@@ -7,7 +7,7 @@ export const fetchPosts = createAsyncThunk(
     'posts/getPost',
     async (_, thunkAPI,page) => {
         try {
-            const response = await axios.get((`https://yibee.vercel.app/api/feed/posts`,{withCredentials: true}),{
+            const response = await axios.get(`https://yibee.onrender.com/api/feed/posts`,{
                 headers:{
                     'Authorization': `Bearer ${userToken}`
                 }
@@ -23,7 +23,7 @@ export const fetchPosts = createAsyncThunk(
 export const createPost = createAsyncThunk('posts/createPost',
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.post(('https://yibee.vercel.app/api/feed/newpost' ,{withCredentials: true}), formData, {
+            const response = await axios.post('https://yibee.onrender.com/api/feed/newpost' , formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${userToken}`
@@ -40,7 +40,7 @@ export const Likepost = createAsyncThunk('posts/LikePost',
     async (p, thunkAPI) => {
         try {
             const id = p._id;
-            const response = await axios.patch((`https://yibee.vercel.app/api/feed/update/${id}`,{withCredentials: true}), userToken, {
+            const response = await axios.patch(`https://yibee.onrender.com/api/feed/update/${id}`, userToken, {
                 headers: {
                     'Authorization': `Bearer ${userToken}`
                 }
@@ -55,7 +55,7 @@ export const Likepost = createAsyncThunk('posts/LikePost',
 export const DeletePost = createAsyncThunk('posts/DeletePost',
     async (p, thunkAPI) => {
         try {
-            const response = await axios.delete((`https://yibee.vercel.app/api/feed/post/${p._id}`,{withCredentials: true}), {
+            const response = await axios.delete(`https://yibee.onrender.com/api/feed/post/${p._id}`, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${userToken}`
@@ -131,8 +131,8 @@ const createPostSlice = createSlice({
                     state.posts[index] = action.payload;
                 }
             }).addCase(DeletePost.fulfilled, (state, action) => {
-                const deletedPost = action.payload
-                state.posts.slice(deletedPost, 1)
+                const deletedPost = action.payload._id;
+                state.posts.splice(deletedPost, 1)
             })
 
     }

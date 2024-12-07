@@ -7,7 +7,7 @@ export const getUser = createAsyncThunk(
     'users/getUser',
     async (_, thunkAPI) => {
         try {
-            const response = await axios.get("https://yibee.vercel.app/api/account/data",{withCredentials: true}, {
+            const response = await axios.get("https://yibee.onrender.com/api/account/data", {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -25,7 +25,7 @@ export const AddToPlaylist = createAsyncThunk(
     'user/AddSong',
     async (currSong, thunkAPI) => {
         try {
-            const response = await axios.patch("https://yibee.vercel.app/api/music/song",{withCredentials: true},currSong, {
+            const response = await axios.patch("https://yibee.onrender.com/api/music/song",currSong, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -42,7 +42,7 @@ export const AddProfilePicture = createAsyncThunk(
     'user/AddProfilePic',
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.patch(`https://yibee.vercel.app/api/account/update`,{withCredentials: true}, formData, {
+            const response = await axios.patch(`https://yibee.onrender.com/api/account/update`, formData, {
                 headers: {
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
@@ -60,7 +60,7 @@ export const AddCoverPicture = createAsyncThunk(
     'user/CoverPic',
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.patch(`https://yibee.vercel.app/api/account/cover`,{withCredentials: true}, formData, {
+            const response = await axios.patch(`https://yibee.onrender.com/api/account/cover`, formData, {
                 headers: {
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
@@ -74,7 +74,6 @@ export const AddCoverPicture = createAsyncThunk(
         }
     }
 )
-
 
 export const userSlice = createSlice({
     name: "users",
