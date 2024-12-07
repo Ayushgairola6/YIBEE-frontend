@@ -6,7 +6,7 @@ export const fetchSongs = createAsyncThunk(
     'songs/fetchSongs',
     async (_, thunkAPI) => {
         try {
-            const response = await axios.get("https://yibee.vercel.app/music/songs" ,{withCredentials: true});
+            const response = await axios.get("https://yibee.vercel.app/api/music/songs" ,{withCredentials: true});
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -19,7 +19,7 @@ export const fetchGenre = createAsyncThunk(
     'songs/fetchCategory',
     async (genre, thunkAPI) => {
         try {
-            const response = await axios.get(`https://yibee.vercel.app/music/genre/${genre}`,{withCredentials: true});
+            const response = await axios.get(`https://yibee.vercel.app/api/music/genre/${genre}`,{withCredentials: true});
 
             return response.data;
         } catch (error) {
