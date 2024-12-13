@@ -14,7 +14,7 @@ const YourMusic = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const currSong = useSelector((state) => state.music.currSong);
   const [songDetail, setSongDetail] = useState(currSong)
-
+  
   const audioRef = useRef();
   const progress = useRef();
 
@@ -83,7 +83,7 @@ const YourMusic = () => {
   }
   return (
     <>
-      <h2 className="text-center text-lg text-white font-bold flex items-center justify-center gap-2 ">Your Playlist <BiHeadphone/></h2>
+      <h2 className="text-center text-lg text-white font-bold flex items-center justify-center gap-2 ">Your Playlist <BiHeadphone /></h2>
       {playlist ? (<>
 
 
@@ -108,7 +108,7 @@ const YourMusic = () => {
             <div className="flex flex-col items-center justify-center gap-1 text-white font-bold text-md  p-2">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-300 to-cyan-400 border-b-2 border-b-teal-300"><span className="text-white">Title :</span>{songDetail.title}</span>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-300 to-cyan-400 flex-wrap border-b-2 border-b-teal-300"><span className="text-white">Artist :</span>{songDetail.artist}</span>
-              
+
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-300 to-cyan-400 border-b-2 border-b-teal-300"><span className="text-white">Streams : </span>{songDetail.streams}</span>
               {/* the progress bar */}
               <div className="w-full flex items-center justify-between p-2 cursor-pointer ">

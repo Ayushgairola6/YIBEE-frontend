@@ -4,6 +4,8 @@ import { Signup } from "../store/AuthSlice";
 import { useRef, useState } from "react";
 import axios from "axios";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import LoadingCircle from "./LoadingCircle";
+
 const SignupPage = () => {
 
   const [empty, setEmpty] = useState(null);
@@ -92,9 +94,9 @@ const SignupPage = () => {
         </div>
 
 
-        <button onClick={handleSignup} className="bg-black text-white font-semibold w-full text-sm p-2 rounded-lg shadow-md shadow-black hover:scale-105">
+        {condition==='Creating your account'?<LoadingCircle />:<button onClick={handleSignup} className="bg-black text-white font-semibold w-full text-sm p-2 rounded-lg shadow-md shadow-black hover:scale-105">
           Sign up with Email
-        </button>
+        </button>}
 
         <p className="underline ">
           By clicking continue , you agree to our Terms of Service and Privacy

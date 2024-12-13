@@ -4,13 +4,14 @@ import { LoginRqst } from "../store/AuthSlice";
 import { useRef } from "react";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-
+import LoadingCircle from "./LoadingCircle";
 
 const Login = () => {
   const [empty, setEmpty] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const loginState = useSelector(state => state.auth.loginStatus);
   const dynamicClass = loginState === "Looks like there is some server issue" ? 'text-red-700' : 'text-blue-700';
+
   const mail = useRef();
   const pass = useRef();
   const dispatch = useDispatch()
@@ -76,9 +77,9 @@ const Login = () => {
               : <FaEyeSlash className="absolute right-3 top-7" />}</button>
           </div>
 
-          <button onClick={handleLogin} className="bg-black text-white font-semibold w-full text-sm p-2 rounded-lg shadow-md shadow-black hover:scale-105">
+          {loginState=== ' please wait...'?<LoadingCircle />:<button onClick={handleLogin} className="bg-black text-white font-semibold w-full text-sm p-2 rounded-lg shadow-md shadow-black hover:scale-105">
             Login
-          </button>
+          </button>}
 
 
           <p className="underline ">

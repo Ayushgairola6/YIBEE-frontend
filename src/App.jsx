@@ -32,14 +32,12 @@ function App() {
   // LOGIN STATE 
   const LoggedInStatus = useSelector(state => state.auth.loggedIn);
   // POSTS AND SONGS FETCHED STATUS 
-  // const fetchStatus = useSelector(state => state.posts.isFetched);
-  // const SongStatus = useSelector(state => state.music.songfetched)
+  const fetchStatus = useSelector(state => state.posts.isFetched);
+  const SongStatus = useSelector(state => state.music.songfetched)
 
 
   useEffect(() => {
     if (LoggedInStatus === true) {
-      dispatch(fetchPosts())
-      dispatch(fetchSongs());
       dispatch(getUser());
     }
   }, [dispatch, LoggedInStatus]);
@@ -63,7 +61,7 @@ function App() {
         </div>
       </Router>
     )
-  } else if (LoggedInStatus === true && window.innerWidth <= 800) {
+  } else if (LoggedInStatus === true && window.innerWidth <= 800 ) {
     return <>
       <Router>
         <div className="relative  bg-black">
@@ -82,7 +80,7 @@ function App() {
       </Router>
     </>
   }
-  else if (LoggedInStatus === true) {
+  else if (LoggedInStatus === true ) {
     return (
 
           <Router>

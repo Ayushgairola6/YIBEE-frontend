@@ -11,7 +11,7 @@ export const Signup = createAsyncThunk(
                     'Content-Type': 'application/json'
                 }
             });
-            console.log(response.data)
+            localStorage.setItem('token', response.data.token);
             return response.data;
         } catch (err) {
             return thunkAPI.rejectWithValue(err.response.data);
@@ -31,8 +31,6 @@ export const LoginRqst = createAsyncThunk(
                 }
             });
             localStorage.setItem('token', response.data.token);
-
-           
             return response.data;
         } catch (err) {
             return thunkAPI.rejectWithValue(err.response.data);
