@@ -39,6 +39,7 @@ function App() {
   useEffect(() => {
     if (LoggedInStatus === true) {
       dispatch(getUser());
+      dispatch(fetchSongs())
     }
   }, [dispatch, LoggedInStatus]);
 

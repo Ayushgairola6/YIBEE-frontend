@@ -9,6 +9,7 @@ const YourMusic = () => {
 
 
   const dispatch = useDispatch();
+  const user = useSelector(state=>state.user.user)
   const playlist = useSelector(state => state.user.user.playlist);
   const [time, setTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -84,7 +85,7 @@ const YourMusic = () => {
   return (
     <>
       <h2 className="text-center text-lg text-white font-bold flex items-center justify-center gap-2 ">Your Playlist <BiHeadphone /></h2>
-      {playlist ? (<>
+      {user? (<>
 
 
         <div className="h-full w-full flex items-center justify-between px-3   overflow-x-hidden">
