@@ -68,7 +68,7 @@ const AuthSlice = createSlice({
         error: null,
         userId: null,
         isAdmin: false,
-        sessionState:null,
+        sessionState:false,
     },
     reducers: {
         logout: (state, action) => {
@@ -78,6 +78,7 @@ const AuthSlice = createSlice({
         }
         ,KeepLoggedIn:(state,action)=>{
           state.loggedIn = true;
+          state.sessionState=true;
         }
         // SIGNUP CASES
     }, extraReducers: (builder) => {

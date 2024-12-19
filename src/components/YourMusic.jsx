@@ -27,7 +27,9 @@ const YourMusic = () => {
 
 
 
-  
+  useEffect(()=>{
+   dispatch(getUser());
+  },[dispatch] )
 
   // updating the progress
   useEffect(() => {

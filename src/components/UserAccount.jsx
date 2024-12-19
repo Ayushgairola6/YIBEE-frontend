@@ -24,9 +24,9 @@ const UserAccount = () => {
     const dispatch = useDispatch()
     const User = useSelector(state => state.user.user);
     //  CALLING FOR THE USER DATA 
-    // useEffect(() => {
-    //     dispatch(getUser());
-    // }, [])
+    useEffect(() => {
+        dispatch(getUser());
+    }, [])
 
 
     async function AddImage() {

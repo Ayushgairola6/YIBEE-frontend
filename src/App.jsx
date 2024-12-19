@@ -26,7 +26,6 @@ function App() {
   // LOGIN STATE 
   const LoggedInStatus = useSelector(state => state.auth.loggedIn);
   const dispatch = useDispatch();
-    const token = localStorage.getItem("token");
 
 
   // check if the token is expired or not to keep the user engaged
@@ -43,7 +42,7 @@ function App() {
   const fetchStatus = useSelector(state => state.posts.isFetched);
   const SongStatus = useSelector(state => state.music.songfetched)
   const userStatus = useSelector(state => state.user.Situation);
-
+  const session = useSelector(state=>state.auth.sessionState);
   useEffect(() => {
     if (LoggedInStatus === true) {
       dispatch(getUser());
@@ -73,7 +72,7 @@ function App() {
         </div>
       </Router>
     )
-  } else if (LoggedInStatus === true && window.innerWidth <= 800) {
+  } else if (LoggedInStatus === true && session===true && window.innerWidth <= 800) {
     return <>
       <Router>
         {fetchStatus === true && SongStatus === true && userStatus === "Suceeded" ? <div className="relative  bg-black">
