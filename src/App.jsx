@@ -1,5 +1,4 @@
 import "./App.css";
-import  axios  from 'axios';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from "./components/Home";
 import MakePostPage from "./components/MakeAPostPage";
@@ -12,7 +11,7 @@ import { fetchPosts } from "./store/posSlice";
 import { fetchSongs } from "./store/musicSlice"
 import { getUser } from "./store/userslice";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import UserAccount from "./components/UserAccount";
 import Loader from "./components/Loader";
 import Genre from "./components/Genre";
@@ -27,15 +26,16 @@ function App() {
   const LoggedInStatus = useSelector(state => state.auth.loggedIn);
   const dispatch = useDispatch();
 
-
+const [loading ,setLoading ] =useState(true);
   // check if the token is expired or not to keep the user engaged
   useEffect(() => {
      const sessionState = JSON.parse(sessionStorage.getItem("loginState"))
     if (sessionState) {
          dispatch(KeepLoggedIn());
     }
+    setLoading(false)
     console.log(LoggedInStatus)
-  }, [])
+  }, [dispatch])
 
 
   // POSTS AND SONGS FETCHED STATUS 
@@ -51,11 +51,17 @@ function App() {
       
     }
 
-  }, [dispatch, LoggedInStatus]);
+  }, [dispatch, LoggedInStatus,session]);
 
 
 
-
+  if (loading) {
+    return (
+      <div className="bg-black text-white flex items-center justify-center h-screen w-screen">
+        <span>Loading...</span>
+      </div>
+    );
+  }
 
 
   if (LoggedInStatus === false) {
