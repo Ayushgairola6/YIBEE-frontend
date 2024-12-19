@@ -26,16 +26,14 @@ function App() {
   const LoggedInStatus = useSelector(state => state.auth.loggedIn);
   const dispatch = useDispatch();
 
-const [loading ,setLoading ] =useState(true);
   // check if the token is expired or not to keep the user engaged
   useEffect(() => {
-     const sessionState = JSON.parse(sessionStorage.getItem("loginState"))
-    if (sessionState) {
-         dispatch(KeepLoggedIn());
-    }
-    setLoading(false)
-    console.log(LoggedInStatus)
-  }, [dispatch])
+    const sessionState = JSON.parse(sessionStorage.getItem("loginState"))
+   if (sessionState) {
+        dispatch(KeepLoggedIn());
+   }
+   console.log(LoggedInStatus)
+ }, [dispatch])
 
 
   // POSTS AND SONGS FETCHED STATUS 
@@ -43,6 +41,7 @@ const [loading ,setLoading ] =useState(true);
   const SongStatus = useSelector(state => state.music.songfetched)
   const userStatus = useSelector(state => state.user.Situation);
   const session = useSelector(state=>state.auth.sessionState);
+
   useEffect(() => {
     if (LoggedInStatus === true) {
       dispatch(getUser());
@@ -55,13 +54,6 @@ const [loading ,setLoading ] =useState(true);
 
 
 
-  if (loading) {
-    return (
-      <div className="bg-black text-white flex items-center justify-center h-screen w-screen">
-        <span>Loading...</span>
-      </div>
-    );
-  }
 
 
   if (LoggedInStatus === false) {
@@ -78,7 +70,7 @@ const [loading ,setLoading ] =useState(true);
         </div>
       </Router>
     )
-  } else if (LoggedInStatus === true && session===true && window.innerWidth <= 800) {
+  } else if (LoggedInStatus === true  && window.innerWidth <= 800) {
     return <>
       <Router>
         {fetchStatus === true && SongStatus === true && userStatus === "Suceeded" ? <div className="relative  bg-black">
@@ -102,7 +94,7 @@ const [loading ,setLoading ] =useState(true);
     return (
 
       <Router>
-        <div className="  relative  bg-black  ">
+      {fetchStatus === true && SongStatus === true && userStatus === "Suceeded" ?  <div className="  relative  bg-black  ">
           <Navbar></Navbar>
           <Routes>
             <Route path="/" element={<Home />}></Route>
@@ -113,7 +105,8 @@ const [loading ,setLoading ] =useState(true);
           </Routes>
           {/* <Controls></Controls> */}
           <Footer></Footer>
-        </div>
+        </div>: <div className="bg-black text-white flex items-center justify-center h-screen w-screen flex-col"><LoadingCard />
+        <span>Loading...</span></div>}
 
       </Router>
 
