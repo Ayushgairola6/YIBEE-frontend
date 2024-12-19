@@ -11,11 +11,11 @@ const Musicplayer = () => {
   const currSong = useSelector((state) => state.music.currSong);
   const status = useSelector((state) => state.music.status);
   const dispatch = useDispatch()
-  useEffect(() => {
-    if (status === 'idle') {
-      dispatch(fetchSongs())
-    }
-  }, [status, dispatch,])
+  // useEffect(() => {
+  //   if (status === 'idle') {
+  //     dispatch(fetchSongs())
+  //   }
+  // }, [status, dispatch,])
   return (
 
     <>

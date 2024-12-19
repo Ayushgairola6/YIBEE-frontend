@@ -1,12 +1,31 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
-"https://yibee.vercel.app/signup"
+
+// verifying the token for presistence
+export const verifyToken = createAsyncThunk(
+    'verify/token', async (token, thunkAPI) => {
+        try {
+            const response = await axios.post('https://yibee.onrender.com/api/authenticate',token, {
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            return response.data;
+        } catch (error) {
+            // alert(error);
+            return thunkAPI.rejectWithValue(error.response.data);
+        }                                                                                                                                        
+    }
+)
+
+
 // SIGNUP REQUEST TO THE SERVER
 export const Signup = createAsyncThunk(
     'post/signupRqst',
     async (SignupData, thunkAPI) => {
         try {
-            const response = await axios.post('https://yibee.onrender.com/api/auth/signup',  SignupData, {
+            const response = await axios.post('https://yibee.onrender.com/api/auth/signup', SignupData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -48,13 +67,17 @@ const AuthSlice = createSlice({
         loginStatus: 'Idle',
         error: null,
         userId: null,
-        isAdmin: false
+        isAdmin: false,
+        sessionState:null,
     },
     reducers: {
         logout: (state, action) => {
             state.loggedIn = false;
             state.user = null;
             localStorage.removeItem('token')
+        }
+        ,KeepLoggedIn:(state,action)=>{
+          state.loggedIn = true;
         }
         // SIGNUP CASES
     }, extraReducers: (builder) => {
@@ -79,19 +102,24 @@ const AuthSlice = createSlice({
             })
             .addCase(LoginRqst.fulfilled, (state, action) => {
                 state.loggedIn = true;
+                const status = sessionStorage.setItem("loginState",JSON.stringify(state.loggedIn));
                 state.loginStatus = 'succeed';
                 state.isAdmin = action.payload.user.isAdmin
-                console.log(action.payload)
-                state.userId = action.payload.user.id; // Assuming user data is returned
-                console.log(state.userId)
+                state.userId = action.payload.user.id; 
                 state.error = null;
             })
             .addCase(LoginRqst.rejected, (state, action) => {
                 state.loginStatus = 'server problem';
                 state.error = action.payload || 'Login failed';
-            });
-
+            })
+            // token verification
+            .addCase(verifyToken.rejected, (state) => {
+                state.loggedIn = false;
+            })
+            .addCase(verifyToken.fulfilled, (state) => {
+                state.loggedIn = true;
+            })
     }
 })
-export const { signup, log,logout } = AuthSlice.actions
+export const { signup, log, logout ,KeepLoggedIn} = AuthSlice.actions
 export default AuthSlice.reducer;

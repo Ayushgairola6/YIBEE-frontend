@@ -41,8 +41,8 @@ const Login = () => {
       <form className=" flex flex-col-reverse gap-4 items-center justify-center h-full bg-gradient-to-br from-black to-gray-500 w-screen">
 
         <div
-          className="bg-slate-300 flex items-center h-fit gap-5 font-semibold text-md border-2 border-black
-      shadow-lg shadow-black  justify-between  flex-col p-3 "
+          className="bg-slate-300 flex items-center h-fit gap-5 font-semibold text-md 
+      shadow-sm shadow-sky-500  justify-between  flex-col p-3 rounded-lg w-4/5 md:w-4/5 mb-3 "
         >
           <h1 className="font-semibold text-2xl underline">
             Login to an existing Account

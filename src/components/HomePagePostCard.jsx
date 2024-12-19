@@ -11,14 +11,12 @@ const PostCard = () => {
   const liked = useSelector(state => state.posts.likedCalled);
   const likedPosts = useSelector(state => state.posts.likedPosts)
   const dispatch = useDispatch();
-  useEffect(() => {
-
-
-
-    if (status === 'idle') {
-      dispatch(fetchPosts());
-    }
-  }, [dispatch, status]);
+  
+  // useEffect(() => {
+  //   if (status === 'idle') {
+  //     dispatch(fetchPosts());
+  //   }
+  // }, [dispatch, status]);
 
   const postContainer = useRef();
 

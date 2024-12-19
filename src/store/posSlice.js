@@ -12,6 +12,7 @@ export const fetchPosts = createAsyncThunk(
                     'Authorization': `Bearer ${userToken}`
                 }
             })
+            console.log(response.data)
            
             return response.data;
         } catch (error) {

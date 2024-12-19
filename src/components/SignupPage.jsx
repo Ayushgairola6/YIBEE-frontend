@@ -41,12 +41,15 @@ const SignupPage = () => {
   }
 
   return (
-    <form className=" flex flex-col-reverse gap-4 items-center justify-center h-full bg-gradient-to-br from-black to-gray-500 w-screen">
+    <form className=" flex flex-col-reverse gap-4 items-center justify-center h-screen bg-gradient-to-br from-black to-gray-500 w-screen ">
+
+
 
       <div
-        className="bg-slate-300 flex items-center h-fit gap-5 font-semibold text-md border-2 border-black
-      shadow-lg shadow-black  justify-between  flex-col p-3 "
+        className=" relative bg-slate-300 flex items-center h-fit gap-5 font-semibold text-md  shadow-sm shadow-sky-500 justify-between  flex-col p-3 border-2 border-white rounded-lg w-4/5 md:w-4/5 mb-3
+        "
       >
+        
         <h1 className="font-semibold text-2xl underline">Create an Account</h1>
         <span>Enter your credentials below to create your account</span>
         <div className="flex items-normal justify-between gap-32">
@@ -68,7 +71,7 @@ const SignupPage = () => {
         </div>
         {/* Email fiels */}
         <div className="w-full">
-          <span className="font-bold text-md">Your Email</span>
+          <span className="font-bold text-md">Your Email (example29@gmail.com)</span>
           <input ref={mail}
             placeholder="Nameexample@gmail.com"
             className="w-full px-2 focus:border-2 focus:ring-4"
@@ -80,7 +83,7 @@ const SignupPage = () => {
         </div>
         {/* password field  */}
         <div className="w-full relative">
-          <span className="font-bold text-md">Password</span>
+          <span className="font-bold text-md">Password(ex:$3D3erefe@)</span>
           <input ref={pass}
             placeholder="xyzxx"
             className="w-full px-2 focus:border-2 focus:ring-4"
@@ -94,7 +97,7 @@ const SignupPage = () => {
         </div>
 
 
-        {condition==='Creating your account'?<LoadingCircle />:<button onClick={handleSignup} className="bg-black text-white font-semibold w-full text-sm p-2 rounded-lg shadow-md shadow-black hover:scale-105">
+        {condition === 'Creating your account' ? <LoadingCircle /> : <button onClick={handleSignup} className="bg-black text-white font-semibold w-full text-sm p-2 rounded-lg shadow-md shadow-black hover:scale-105">
           Sign up with Email
         </button>}
 

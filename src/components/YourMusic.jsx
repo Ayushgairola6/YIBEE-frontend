@@ -27,10 +27,7 @@ const YourMusic = () => {
 
 
 
-  // fetching the user data to get acces to the user playlist
-  useEffect(() => {
-    dispatch(getUser());
-  }, [dispatch])
+  
 
   // updating the progress
   useEffect(() => {

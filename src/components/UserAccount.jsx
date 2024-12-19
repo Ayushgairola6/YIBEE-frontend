@@ -24,18 +24,15 @@ const UserAccount = () => {
     const dispatch = useDispatch()
     const User = useSelector(state => state.user.user);
     //  CALLING FOR THE USER DATA 
-    useEffect(() => {
-        dispatch(getUser());
-    }, [])
+    // useEffect(() => {
+    //     dispatch(getUser());
+    // }, [])
 
 
     async function AddImage() {
         const formData = new FormData();
 
-        // if (!UserImage.current.files[0]) {
-        //     alert("This field can not be empty")
-        //     return;
-        // }
+     
         formData.append('ProfilePictures', UserImage.current.files[0])
         dispatch(AddProfilePicture(formData));
         setProfilePreview(null)
@@ -44,10 +41,7 @@ const UserAccount = () => {
 
     async function AddCover() {
         const formData = new FormData();
-        // if (!Cover.current.files[0]) {
-        //     alert('This field can not be empty')
-        //     return;
-        // }
+        
         formData.append('CoverPhotos', Cover.current.files[0])
         dispatch(AddCoverPicture(formData));
         setCoverPreview(null);
