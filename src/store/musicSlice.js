@@ -6,7 +6,7 @@ export const fetchSongs = createAsyncThunk(
     'songs/fetchSongs',
     async (_, thunkAPI) => {
         try {
-            const response = await axios.get("http://localhost:8080/api/music/songs" ,{
+            const response = await axios.get("https://yibee.onrender.com/api/music/songs" ,{
                 headers :{
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
@@ -25,7 +25,7 @@ export const fetchGenre = createAsyncThunk(
     'songs/fetchCategory',
     async (genre, thunkAPI) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/music/genre/${genre}`,{
+            const response = await axios.get(`https://yibee.onrender.com/api/music/genre/${genre}`,{
                 headers:{
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
