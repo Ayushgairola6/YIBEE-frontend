@@ -73,7 +73,7 @@ function App() {
   } else if (LoggedInStatus === true  && window.innerWidth <= 800) {
     return <>
       <Router>
-        {fetchStatus === true && SongStatus === true && userStatus === "Suceeded" ? <div className="relative  bg-black">
+       <div className="relative  bg-black">
           <SmallNavbar />
           <Routes>
             <Route path="/" element={<SocialMedia />}></Route>
@@ -85,8 +85,7 @@ function App() {
           </Routes>
           <Footer></Footer>
 
-        </div> : <div className="bg-black text-white flex items-center justify-center h-screen w-screen flex-col"><LoadingCard />
-          <span>Loading...</span></div>}
+        </div> 
       </Router>
     </>
   }
@@ -94,7 +93,7 @@ function App() {
     return (
 
       <Router>
-      {fetchStatus === true && SongStatus === true && userStatus === "Suceeded" ?  <div className="  relative  bg-black  ">
+      <div className="  relative  bg-black  ">
           <Navbar></Navbar>
           <Routes>
             <Route path="/" element={<Home />}></Route>
@@ -105,11 +104,11 @@ function App() {
           </Routes>
           {/* <Controls></Controls> */}
           <Footer></Footer>
-        </div>: <div className="bg-black text-white flex items-center justify-center h-screen w-screen flex-col"><LoadingCard />
-        <span>Loading...</span></div>}
+        </div>
 
       </Router>
-
+// : <div className="bg-black text-white flex items-center justify-center h-screen w-screen flex-col"><LoadingCard />
+// <span>Loading...</span></div>}
 
     )
   }
