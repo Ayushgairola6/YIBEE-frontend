@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { getUser, AddProfilePicture, AddCoverPicture } from '../store/userslice';
 import { useEffect, useRef, useState } from "react";
+import { KeepLoggedIn } from "../store/AuthSlice";
+
 import { BiPlus } from "react-icons/bi";
 import Loader from "./Loader";
 import ConfirmBox from "./ConfirmationBox";
@@ -28,7 +30,12 @@ const UserAccount = () => {
     //     dispatch(getUser());
     // }, [])
 
-
+    useEffect(() => {
+        const sessionState = JSON.parse(sessionStorage.getItem("loginState"))
+       if (sessionState) {
+            dispatch(KeepLoggedIn());
+       }
+     }, [dispatch])
     async function AddImage() {
         const formData = new FormData();
 

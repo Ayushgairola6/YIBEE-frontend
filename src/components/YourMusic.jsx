@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { KeepLoggedIn } from "../store/AuthSlice";
+
 import { getUser } from "../store/userslice";
 import { FaPause, FaPlay } from "react-icons/fa";
 import { useState } from "react";
@@ -26,7 +28,12 @@ const YourMusic = () => {
   };
 
 
-
+  useEffect(() => {
+    const sessionState = JSON.parse(sessionStorage.getItem("loginState"))
+   if (sessionState) {
+        dispatch(KeepLoggedIn());
+   }
+ }, [dispatch])
   // useEffect(()=>{
   //  dispatch(getUser());
   // },[dispatch] )

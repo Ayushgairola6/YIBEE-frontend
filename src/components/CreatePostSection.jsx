@@ -1,14 +1,25 @@
 import { useSelector, useDispatch } from "react-redux";
 import { createPost } from "../store/posSlice";
-import { useState } from "react";
+import { KeepLoggedIn } from "../store/AuthSlice";
+import { useEffect, useState } from "react";
 import { useRef } from "react";
 import Popup from "./Popup";
 import Error from "./error";
 const CreatePost = () => {
+  const dispatch = useDispatch();
+
+  // verification  of the state
+  useEffect(() => {
+    const sessionState = JSON.parse(sessionStorage.getItem("loginState"))
+    if (sessionState) {
+      dispatch(KeepLoggedIn());
+    }
+  }, [dispatch])
+
 
   const img = useRef();
   const Posted = useSelector(state => state.posts.isPosted);
-  let isClicked = useSelector(state=>state.posts.isCreated);
+  let isClicked = useSelector(state => state.posts.isCreated);
   const [postData, setPostData] = useState({
     Mood: "",
     images: "",
@@ -31,7 +42,6 @@ const CreatePost = () => {
   // VALUE OF ALL THE REFS 
 
 
-  const dispatch = useDispatch();
   // METHOD THAT IS CALLED WHEN FORM IS SUBMITTED
   async function HandleCreatePost(e) {
     await e.preventDefault()
@@ -51,16 +61,16 @@ const CreatePost = () => {
 
 
     dispatch(createPost(formData));
-     
-   
+
+
 
   }
 
   return (
     <>
-      {Posted==="Posted" ? <Popup Posted={Posted} /> : null}
-      {Posted ==="Server Error!"?<Error Posted={Posted} />:null}
-      {Posted==="Please wait.."?<Popup Posted={Posted}/> : null}
+      {Posted === "Posted" ? <Popup Posted={Posted} /> : null}
+      {Posted === "Server Error!" ? <Error Posted={Posted} /> : null}
+      {Posted === "Please wait.." ? <Popup Posted={Posted} /> : null}
       {/* {Posted === "Posted" ? <Popup  /> : null} */}
       <form encType="multipart/form-data" onSubmit={HandleCreatePost} className="h-full w-screen flex  items-center justify-center text-xl font-bold font-serif my-4 ">
 

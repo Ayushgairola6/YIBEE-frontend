@@ -15,7 +15,6 @@ const dispatch = useDispatch()
         dispatch(DeletePost(selectedPost))
         dispatch(getUser());
         setIsClicked(false)
-        await alert("post has been deleted");
 
     }
 

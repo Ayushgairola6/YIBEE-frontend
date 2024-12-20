@@ -5,7 +5,7 @@ import axios from 'axios';
 export const verifyToken = createAsyncThunk(
     'verify/token', async (token, thunkAPI) => {
         try {
-            const response = await axios.post('https://yibee.onrender.com/api/authenticate',token, {
+            const response = await axios.post('http://localhost:8080/api/authenticate',token, {
                 headers: {
                     "Content-Type": "application/json",
                     'Authorization': `Bearer ${token}`
@@ -25,7 +25,7 @@ export const Signup = createAsyncThunk(
     'post/signupRqst',
     async (SignupData, thunkAPI) => {
         try {
-            const response = await axios.post('https://yibee.onrender.com/api/auth/signup', SignupData, {
+            const response = await axios.post('http://localhost:8080/api/auth/signup', SignupData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -43,7 +43,7 @@ export const LoginRqst = createAsyncThunk(
     'post/loginRqst',
     async (LoginData, thunkAPI) => {
         try {
-            const response = await axios.post('https://yibee.onrender.com/api/auth/login', LoginData, {
+            const response = await axios.post('http://localhost:8080/api/auth/login', LoginData, {
                 headers: {
                     'Content-Type': 'application/json',
 
