@@ -29,28 +29,28 @@ function App() {
   // check if the token is expired or not to keep the user engaged
   useEffect(() => {
     const sessionState = JSON.parse(sessionStorage.getItem("loginState"))
-   if (sessionState) {
-        dispatch(KeepLoggedIn());
-   }
-   console.log(LoggedInStatus)
- }, [dispatch])
+    if (sessionState) {
+      dispatch(KeepLoggedIn());
+    }
+    console.log(LoggedInStatus)
+  }, [dispatch])
 
 
   // POSTS AND SONGS FETCHED STATUS 
   const fetchStatus = useSelector(state => state.posts.isFetched);
   const SongStatus = useSelector(state => state.music.songfetched)
   const userStatus = useSelector(state => state.user.Situation);
-  const session = useSelector(state=>state.auth.sessionState);
+  const session = useSelector(state => state.auth.sessionState);
 
   useEffect(() => {
     if (LoggedInStatus === true) {
       dispatch(getUser());
       dispatch(fetchSongs());
       dispatch(fetchPosts())
-      
+
     }
 
-  }, [dispatch, LoggedInStatus,session]);
+  }, [dispatch, LoggedInStatus, session]);
 
 
 
@@ -70,22 +70,22 @@ function App() {
         </div>
       </Router>
     )
-  } else if (LoggedInStatus === true  && window.innerWidth <= 800) {
+  } else if (LoggedInStatus === true && window.innerWidth <= 800) {
     return <>
       <Router>
-       <div className="relative  bg-black">
-          <SmallNavbar />
+        <div className="relative  bg-black">
+          <Navbar />
           <Routes>
             <Route path="/" element={<SocialMedia />}></Route>
             <Route path="/createPost" element={<MakePostPage />}></Route>
             <Route path="/Account" element={<UserAccount />}></Route>
             <Route path="/Genre" element={<Genre />}></Route>
-            <Route path="/playlist" element={<YourMusic />}></Route>
+            <Route path="/playlist" element={<YourMusic /> }></Route>
             <Route path="/musicPlayer" element={<Musicplayer />}></Route>
           </Routes>
           <Footer></Footer>
 
-        </div> 
+        </div>
       </Router>
     </>
   }
@@ -93,11 +93,11 @@ function App() {
     return (
 
       <Router>
-      <div className="  relative  bg-black  ">
+        <div className="  relative  bg-black  ">
           <Navbar></Navbar>
           <Routes>
             <Route path="/" element={<Home />}></Route>
-            <Route path="/Explore" element={<YourMusic />}></Route>
+            <Route path="/Explore" element={userStatus === "Suceeded" ? <YourMusic /> : <LoadingCard />}></Route>
             <Route path="/Post" element={<MakePostPage />}></Route>
             <Route path="/Account" element={<UserAccount />}></Route>
             <Route path="/Genre" element={<Genre />}></Route>
@@ -107,8 +107,8 @@ function App() {
         </div>
 
       </Router>
-// : <div className="bg-black text-white flex items-center justify-center h-screen w-screen flex-col"><LoadingCard />
-// <span>Loading...</span></div>}
+      // : <div className="bg-black text-white flex items-center justify-center h-screen w-screen flex-col"><LoadingCard />
+      // <span>Loading...</span></div>}
 
     )
   }

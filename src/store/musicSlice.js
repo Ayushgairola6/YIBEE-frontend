@@ -6,8 +6,8 @@ export const fetchSongs = createAsyncThunk(
     'songs/fetchSongs',
     async (_, thunkAPI) => {
         try {
-            const response = await axios.get("https://yibee.onrender.com/api/music/songs" ,{
-                headers :{
+            const response = await axios.get("https://yibee.onrender.com/api/music/songs", {
+                headers: {
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
                 }
@@ -25,8 +25,8 @@ export const fetchGenre = createAsyncThunk(
     'songs/fetchCategory',
     async (genre, thunkAPI) => {
         try {
-            const response = await axios.get(`https://yibee.onrender.com/api/music/genre/${genre}`,{
-                headers:{
+            const response = await axios.get(`https://yibee.onrender.com/api/music/genre/${genre}`, {
+                headers: {
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
                 }
@@ -38,27 +38,38 @@ export const fetchGenre = createAsyncThunk(
         }
     }
 );
-// Uploading songs to the database
-// export const UploadSong = createAsyncThunk(
-//     'songs/UploadMusic',
-//     async (genre, thunkAPI) => {
-//         try {
-            
-//             return response.data;
-//         } catch (error) {
-//             return thunkAPI.rejectWithValue(error.response.data);
-//         }
-//     }
-// );
+// fetch a specific genre
+export const SearchSongs = createAsyncThunk(
+    'songs/SearchSongs',
+    async (query, thunkAPI) => {
+        try {
+            const response = await axios.get(`https://yibee.onrender.com/api/music/search/${query}`, {
+                headers: {
+                    'Content-Type': 'multipart/formData',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            return response.data;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error.response.data);
+        }
+    }
+);
+
+
+
 
 const initialState = {
-    fetchedSongs :[],
+    fetchedSongs: [],
     currSong: null,
     isPlaying: false,
     status: 'idle',
     error: null,
-    songfetched:false,
-    GenreFetched:null,
+    songfetched: false,
+    GenreFetched: null,
+    SearchResults: [],
+    searchState:"IDLE"
 };
 
 const MusicSlice = createSlice({
@@ -66,18 +77,21 @@ const MusicSlice = createSlice({
     initialState,
     reducers: {
         setCurrSong: (state, action) => {
-           console.log('called');
-           state.currSong = state.fetchedSongs[0];
+            console.log('called');
+            state.currSong = state.fetchedSongs[0];
         },
         togglePlayPause: (state) => {
             state.isPlaying = !state.isPlaying;
         },
         nextSong: (state) => {
-           state.currSong = null;
+            state.currSong = null;
         },
         prevSong: (state) => {
             state.currSong = null;
         },
+        setSong:(state,action)=>{
+            state.currSong = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -86,24 +100,36 @@ const MusicSlice = createSlice({
             })
             .addCase(fetchSongs.fulfilled, (state, action) => {
                 state.status = 'succeeded';
-                state.songfetched =!state.songfetched;
-                state.fetchedSongs = action.payload;  
+                state.songfetched = !state.songfetched;
+                state.fetchedSongs = action.payload;
                 state.currSong = state.fetchedSongs[0];
             })
             .addCase(fetchSongs.rejected, (state, action) => {
                 state.status = 'failed';
                 state.error = action.payload;
-            }).addCase(fetchGenre.pending,(state,action)=>{
-                state.GenreFetched =action.payload;
-
-            }).addCase(fetchGenre.rejected ,(state,action)=>{
+            }).addCase(fetchGenre.pending, (state, action) => {
                 state.GenreFetched = action.payload;
-            }).addCase(fetchGenre.fulfilled,(state,action)=>{
+
+            }).addCase(fetchGenre.rejected, (state, action) => {
+                state.GenreFetched = action.payload;
+            }).addCase(fetchGenre.fulfilled, (state, action) => {
                 state.GenreFetched = action.payload
+            })
+            // search sonsg query
+            .addCase(SearchSongs.fulfilled, (state, action) => {
+                state.SearchResults = action.payload;
+                state.searchState = "Success"
+            })
+            .addCase(SearchSongs.pending, (state, action) => {
+                state.searchState = "loading...."
+            })
+            .addCase(SearchSongs.rejected, (state, action) => {
+                 state.searchState = "could not find any songs"
+                 
             })
     },
 });
 
-export const { setCurrSong, togglePlayPause, nextSong, prevSong } = MusicSlice.actions;
+export const { setCurrSong, togglePlayPause, nextSong, prevSong ,setSong} = MusicSlice.actions;
 
 export default MusicSlice.reducer;

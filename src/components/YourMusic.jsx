@@ -8,11 +8,14 @@ import { useState } from "react";
 import { useRef } from "react";
 import { BiHeadphone } from "react-icons/bi";
 const YourMusic = () => {
-
-
   const dispatch = useDispatch();
+
+  useEffect(()=>{
+    dispatch(getUser());
+   },[dispatch] )
+
   const user = useSelector(state=>state.user.user)
-  const playlist = useSelector(state => state.user.user.playlist);
+  // const playlist = useSelector(state => state.user.user.playlist);
   const [time, setTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const currSong = useSelector((state) => state.music.currSong);
@@ -34,9 +37,7 @@ const YourMusic = () => {
         dispatch(KeepLoggedIn());
    }
  }, [dispatch])
-  useEffect(()=>{
-   dispatch(getUser());
-  },[dispatch] )
+ 
 
   // updating the progress
   useEffect(() => {
@@ -91,14 +92,14 @@ const YourMusic = () => {
   return (
     <>
       <h2 className="text-center text-lg text-white font-bold flex items-center justify-center gap-2 ">Your Playlist <BiHeadphone /></h2>
-      {user? (<>
+      {user ? (<>
 
 
         <div className="h-full w-full flex items-center justify-between px-3   overflow-x-hidden">
 
           {/* CONTAINER TO HOLD THE SONGS ADDED BY THE USER IN HIS PLAYLIST */}
           <div className="min-h-screen max-h-screen overflow-y-auto w-full max-w-2xl  shadow-sm shadow-teal-500 text-white font-semibold text-lg items-center justify-center no-scrollbar max-lg:text-xs  ">
-            {playlist.map((song) => {
+            {user.playlist.map((song) => {
               return <ul key={song._id} className="shadow-sm shadow-teal-600 flex items-center justify-between px-2 my-2 flex-wrap"> <span>{song.title}</span> <span>{song.artist}</span> <span>{isPlaying === true && songDetail._id === song._id ? <FaPause onClick={pause} /> : <FaPlay onClick={() => chooseSong(song)} />}</span></ul>
 
 
@@ -107,7 +108,7 @@ const YourMusic = () => {
 
           </div>
           {/* CONTAINER TO DISPLAY THE IMAGE AND DATA OF THE SONG THATS IS BEING PLAYED */}
-          <div className="p-2 flex flex-col m-auto max-w-64 items-center  justify-center gap-5 rounded-2xl shadow-md shadow-teal-400 max-lg:w-24  max-lg:h-fit max-lg:gap-1 max-lg:text-xs max-lg:p-1">
+          {songDetail?<div className="p-2 flex flex-col m-auto max-w-64 items-center  justify-center gap-5 rounded-2xl shadow-md shadow-teal-400 max-lg:w-24  max-lg:h-fit max-lg:gap-1 max-lg:text-xs max-lg:p-1">
             <div className="h-32 w-32 max-lg:h-20 max-lg:w-20">
               <img className="h-full w-full bg-black rounded-xl border-b border-teal-400 " src={songDetail.thumbnail} alt="" />
             </div>
@@ -135,7 +136,7 @@ const YourMusic = () => {
               </div>
             </div>
 
-          </div>
+          </div>:<span>loading...</span>}
 
         </div>
 

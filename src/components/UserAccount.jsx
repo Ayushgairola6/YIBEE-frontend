@@ -182,7 +182,7 @@ const UserAccount = () => {
             </div>
         </>) :
             // bewlow this the else statement starts 
-            <div className="flex items-center justify-center tet-center text-bold text-xl text-teal-500">
+            <div className="flex flex-col-reverse items-center justify-center tet-center text-bold text-xl text-teal-500">
                 <h1>Your Account details are loading please wait</h1>
                 <Loader></Loader>
             </div>

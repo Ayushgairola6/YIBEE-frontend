@@ -1,45 +1,62 @@
-import { useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { DarkMode, LightMode, defaultMode } from "../store/ThemeSlice";
-import { useSelector } from "react-redux";
-
+import { FaSearch } from "react-icons/fa";
+import { IoMenu } from 'react-icons/io5'
+import SideBar from "./SideBar";
+import { useSelector, useDispatch } from "react-redux";
+import { SearchSongs } from "../store/musicSlice";
+import OverLay from "./Overlay"
 const Navbar = () => {
 
-//   const dispatch = useDispatch()
-//   const isDefault = useSelector(state => state.theme.isDefault);
-//   const dark = useSelector(state => state.theme.isDark);
-//   const light = useSelector(state => state.theme.isLight);
-//   const theme = useRef();
-// const navbar = useRef();
-//   // CHANGING THEME STATE
-//   function handleThemeChange() {
-//     if (theme.current.value === "default") {
-//       dispatch(defaultMode())
-     
+  const dispatch = useDispatch()
 
-//     }
-//     else if (theme.current.value === 'Dark') {
-//       dispatch(DarkMode())
-//       console.log(dark)
-//     }
-//     else if (theme.current.value === 'Light') {
-//       dispatch(LightMode())
-//      navbar.current.classList.toggle('dark');
-//     }
-//   }
+  // sidebar visibility state
+  const [visible, setVisible] = useState(false);
+  const [search, setSearch] = useState(false);
+  const inputRef = useRef()
+
+  function show_Sidebar() {
+    setVisible(!visible)
+    console.log(visible)
+  }
+
+  function hide_Sidebar() {
+    setVisible(!visible)
+    console.log(visible)
+  }
+
+  function Search_Music() {
+    dispatch(SearchSongs(inputRef.current.value))
+    setSearch(true);
+
+  }
+
+
   return (
     <>
       <header>
-        <nav  className="flex items-center justify-evenly text-white bg-transparent dark:bg-black dark:text-white">
-          <ul>
-            <h1 className=" text-4xl font-bold">
+        {search === true ? <OverLay setSearch={setSearch} /> : null}
+        <nav className="flex items-center justify-evenly text-white bg-transparent dark:bg-black dark:text-white">
+          <ul className="flex items-center justify-center gap-8">
+            <h1 className=" text-2xl font-bold">
               <span className='text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-teal-500'>YIBEE</span>
             </h1>
-          </ul>
-          <ul>
-            <div className="flex items-center justify-evenly gap-5">
+            <div className="relative ">
+              <input
+                ref={inputRef}
+                className=" text-black text-sm font-bold px-2 rounded-xl"
+                type="text"
+                placeholder="EX : FXRGET MY NAME ...."
+              />
+              <button className="absolute right-2 top-1.5 " onClick={Search_Music}>
+                <FaSearch size={14} color="black" />
 
+              </button>
+            </div>
+          </ul>
+          <ul className=" ">
+            <div className="sm:flex items-center justify-evenly gap-5 hidden ">
               <Link className="text-l font-bold" to="/">
                 Home
               </Link>
@@ -52,28 +69,18 @@ const Navbar = () => {
               <Link className="text-l font-bold" to="/Account">
                 Account
               </Link>
+              <ul>
+
+              </ul>
 
             </div>
+            <ul className="sm:hidden block" >
+              <IoMenu onClick={show_Sidebar} size={30} />
+            </ul>
           </ul>
-          {/* <ul>
-            <div>
-              <input
-                onFocus={NavbarExpand}
-                ref={input}
-                className="pt-0.3 text-black text-md font-bold px-2 rounded-3xl"
-                type="text"
-                placeholder="Arijit Singh ...."
-              />
-            </div>
-          </ul> */}
-          {/* <ul>
-            <select  name='theme'
-              className=" text-black font-mono font-semibold" >
-              <option value="default">default</option>
-              <option value="Dark">Dark</option>
-              <option value="Light">Light</option>
-            </select>
-          </ul> */}
+          {visible === true ? <SideBar hide_Sidebar={hide_Sidebar} /> : null}
+
+
         </nav>
       </header>
 
