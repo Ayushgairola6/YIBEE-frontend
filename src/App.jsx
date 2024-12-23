@@ -97,7 +97,7 @@ function App() {
           <Navbar></Navbar>
           <Routes>
             <Route path="/" element={<Home />}></Route>
-            <Route path="/Explore" element={userStatus === "Suceeded" ? <YourMusic /> : <LoadingCard />}></Route>
+            <Route path="/Explore" element= {<YourMusic /> }></Route>
             <Route path="/Post" element={<MakePostPage />}></Route>
             <Route path="/Account" element={<UserAccount />}></Route>
             <Route path="/Genre" element={<Genre />}></Route>
