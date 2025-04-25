@@ -21,16 +21,20 @@ import Musicplayer from "./components/MusicPlayer";
 import LoadingCard from "./components/LoadingCard";
 import { verifyToken } from "./store/AuthSlice";
 import sunset from './assets/sunset.jpg'
+
+
 function App() {
   // LOGIN STATE 
   const LoggedInStatus = useSelector(state => state.auth.loggedIn);
   const dispatch = useDispatch();
   const [delay, setDelay] = useState(true);
+
   // check if the token is expired or not to keep the user engaged
   useEffect(() => {
     dispatch(verifyToken())
   }, [dispatch])
 
+// the slight loading effect
   useEffect(() => {
     const time = setTimeout(() => {
       setDelay(false);
