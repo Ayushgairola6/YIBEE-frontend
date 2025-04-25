@@ -6,7 +6,7 @@ export const fetchSongs = createAsyncThunk(
     'songs/fetchSongs',
     async (_, thunkAPI) => {
         try {
-            const response = await axios.get("http://localhost:8080/api/music/songs", {
+            const response = await axios.get("https://yibee.onrender.com/api/music/songs", {
                   withCredentials: true,
                   headers: {
                     
@@ -26,7 +26,7 @@ export const fetchGenre = createAsyncThunk(
     'songs/fetchCategory',
     async (genre, thunkAPI) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/music/genre/${genre}`, {
+            const response = await axios.get(`https://yibee.onrender.com/api/music/genre/${genre}`, {
                 withCredentials: true,
                   headers: {
                     'Content-Type': 'multipart/formData',
@@ -45,7 +45,7 @@ export const SearchSongs = createAsyncThunk(
     'songs/SearchSongs',
     async (query, thunkAPI) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/music/search/${query}`, {
+            const response = await axios.get(`https://yibee.onrender.com/api/music/search/${query}`, {
                 withCredentials: true,  headers: {
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
