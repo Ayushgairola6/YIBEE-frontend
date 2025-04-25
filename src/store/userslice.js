@@ -2,21 +2,22 @@ import { createSlice, nanoid, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
 
 
-const token = localStorage.getItem('token')
 export const getUser = createAsyncThunk(
     'users/getUser',
     async (_, thunkAPI) => {
         try {
-            const response = await axios.get("https://yibee.onrender.com/api/account/data", {
-                headers: {
+            const token = localStorage.getItem('token')
+
+            const response = await axios.get("http://localhost:8080/api/account/data", {
+                withCredentials: true, headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 }
             });
-            // console.log(response)
+            // (response)
             return response.data;
         } catch (error) {
-            console.log(error);
+            (error);
             return thunkAPI.rejectWithValue(error.response.data);
         }
     }
@@ -25,15 +26,15 @@ export const AddToPlaylist = createAsyncThunk(
     'user/AddSong',
     async (currSong, thunkAPI) => {
         try {
-            const response = await axios.patch("https://yibee.onrender.com/api/music/song",currSong, {
-                headers: {
+            const response = await axios.patch("http://localhost:8080/api/music/song", currSong, {
+                withCredentials: true, headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 }
             });
             return response.data;
         } catch (error) {
-            console.log(error);
+            (error);
             return thunkAPI.rejectWithValue(error.response.data);
         }
     })
@@ -42,15 +43,21 @@ export const AddProfilePicture = createAsyncThunk(
     'user/AddProfilePic',
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.patch(`https://yibee.onrender.com/api/account/update`, formData, {
-                headers: {
+            const token = localStorage.getItem("token")
+            const response = await axios.patch(`http://localhost:8080/api/account/update`, formData, {
+                withCredentials: true, headers: {
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
                 }
             });
-            return response.data;
+            if (response.data.message === "done") {
+                const userData = await thunkAPI.dispatch(getUser()).unwrap();
+                return userData; 
+            }
+
+            return thunkAPI.rejectWithValue("Upload failed");
         } catch (error) {
-            console.log(error);
+            (error);
             return thunkAPI.rejectWithValue(error.response.data);
         }
     }
@@ -60,16 +67,23 @@ export const AddCoverPicture = createAsyncThunk(
     'user/CoverPic',
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.patch(`https://yibee.onrender.com/api/account/cover`, formData, {
+            const token = localStorage.getItem("token")
+
+            const response = await axios.patch(`http://localhost:8080/api/account/cover`, formData, {
+                withCredentials: true,
                 headers: {
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
                 }
             });
+            if (response.data.message === "done") {
+                const userData = await thunkAPI.dispatch(getUser()).unwrap();
+                return userData;
+            }
 
-            return response.data;
+            return thunkAPI.rejectWithValue("Upload failed");
         } catch (error) {
-            console.log(error);
+            (error);
             return thunkAPI.rejectWithValue(error.response.data);
         }
     }
@@ -84,8 +98,8 @@ export const userSlice = createSlice({
         isAdmin: false,
         playlist: null,
         isAdded: 'not added',
-        banner: null,
-        profile: null
+        banner: "idle",
+        profile: "idle"
     },
     reducers: {
         setUser: (state, action) => {
@@ -120,26 +134,31 @@ export const userSlice = createSlice({
                 state.isAdmin = action.payload
                 state.playlist = action.payload.playlist;
                 state.isAdded = action.payload.res
-                console.log(action.payload.res, 'success')
+                    (action.payload.res, 'success')
                 state.Situation = 'Suceeded';
             })
             // coverphoto
-            
+
             .addCase(AddCoverPicture.pending, (state, action) => {
                 state.banner = "isLoading"
             }).addCase(AddCoverPicture.fulfilled, (state, action) => {
-                state.banner = null
                 state.user = action.payload
-
+                state.banner = "idle"
+            })
+            .addCase(AddCoverPicture.rejected, (state, action) => {
+                state.banner = 'idle';
             })
             // forProfilePicture
             .addCase(AddProfilePicture.pending, (state, action) => {
                 state.profile = "loading"
             })
+            .addCase(AddProfilePicture.rejected, (state, action) => {
+                state.profile = 'idle';
+            })
             .addCase(AddProfilePicture.fulfilled, (state, action) => {
                 state.profile = null
                 state.user = action.payload
-
+                state.profile = "idle"
             })
 
     }

@@ -23,42 +23,40 @@ const Login = () => {
       password: pass.current.value,
     }
     if (mail.current.value === "" || pass.current.value === "") {
-      
-        setEmpty("All fields are mandatory");
-      
       return;
     }
     dispatch(LoginRqst(LoginData));
   }
 
-   function TogglePassword() {
+  function TogglePassword() {
     setIsVisible(!isVisible);
   }
 
 
   return (
     <>
-      <form className=" flex flex-col-reverse gap-4 items-center justify-center h-full bg-gradient-to-br from-black to-gray-500 w-screen">
+      <form className="h-screen  gap-4 flex items-center justify-center bg-black text-white">
 
         <div
-          className="bg-slate-300 flex items-center h-fit gap-5 font-semibold text-md 
-      shadow-sm shadow-sky-500  justify-between  flex-col p-3 rounded-lg w-4/5 md:w-4/5 mb-3 "
+          className=" flex items-center h-fit gap-5 font-semibold text-md 
+      shadow-2xl shadow-sky-900  justify-between  flex-col p-3 rounded-lg  w-[90%] md:w-3/5 mb-3 "
         >
-          <h1 className="font-semibold text-2xl underline">
-            Login to an existing Account
-          </h1>
-          <div className="flex items-center justify-between gap-20 s">
-            <span className="text-red-600">{empty}</span>
-            <span className={`${dynamicClass}`}>Status:{loginState}</span>
-          </div>
+          <section className="w-full text-center">
+            <h1 className="font-semibold w-full text-2xl shadow-md">
+              Welcome Back
+            </h1>
+            <span className="text-sm text-center  w-full bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400 ">Lets jam together</span>
+          </section>
+
+
 
           <div className="w-full">
             <span>Email Address</span>
             <input ref={mail}
-              placeholder="Nameexample@gmail.com"
-              className="w-full px-2 focus:border-2 focus:ring"
+              placeholder="JohnDoe@gmail.com"
+              className="w-full px-2   rounded-xl text-black transition-all p-2"
               type="email"
-               pattern="^\S*$"
+              pattern="^\S*$"
               title="no spaces allowed"
               required
             />
@@ -66,35 +64,30 @@ const Login = () => {
           <div className="w-full relative ">
             <span>Your Password</span>
             <input ref={pass}
-              placeholder="must contain special characters"
-              className=" w-full px-2 focus:border-2 focus:ring flex items-center justify-between "
-              type={!isVisible?"password":"text"}
+              placeholder="Your password"
+              className=" w-full px-2   rounded-xl text-black transition-all p-2 "
+              type={!isVisible ? "password" : "text"}
               pattern="^\S*$"
               title="no spaces allowed"
               required
             />
-            <button onClick={TogglePassword} type="button"> {isVisible === false ? <FaEye  className="absolute right-3 top-7" />
+            <button onClick={TogglePassword} type="button"> {isVisible === false ? <FaEye className="absolute right-3 top-7" />
               : <FaEyeSlash className="absolute right-3 top-7" />}</button>
           </div>
 
-          {loginState=== ' please wait...'?<LoadingCircle />:<button onClick={handleLogin} className="bg-black text-white font-semibold w-full text-sm p-2 rounded-lg shadow-md shadow-black hover:scale-105">
+          {loginState === ' please wait...' ? <button className="bg-black text-white font-semibold w-full text-sm p-2 rounded-lg shadow-md shadow-black hover:scale-105 animate-pulse">Please wait..</button> : <button onClick={handleLogin} className="bg-gradient-to-br from-indigo-600 to-purple-600 text-white font-semibold w-full text-sm p-2 rounded-lg shadow-md shadow-black transition-all ">
             Login
           </button>}
+          <p className="text-gray-300 text-md">Don't have an account <Link to='/signup' className="text-sky-600 underline" >
+            Signup
+          </Link></p>
 
-
-          <p className="underline ">
+          <p className="underline text-sm text-gray-600 text-center ">
             By clicking continue , you agree to our Terms of Service and Privacy
             Policy
           </p>
         </div>
-        <div className=" right-8 top-5 flex flex-col items-center justify-center  ">
-          <span className="text-white font-semibold text-md underline  ">
-            Dont't have an Account
-          </span>
-          <Link to="/signup" className="bg-black text-center text-white font-semibold w-full text-sm p-2 rounded-lg hover:border-white hover:border-2 ">
-            Signup
-          </Link>
-        </div>
+
       </form>
     </>
   );

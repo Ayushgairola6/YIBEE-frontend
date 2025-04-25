@@ -11,16 +11,12 @@ const Musicplayer = () => {
   const currSong = useSelector((state) => state.music.currSong);
   const status = useSelector((state) => state.music.status);
   const dispatch = useDispatch()
-  // useEffect(() => {
-  //   if (status === 'idle') {
-  //     dispatch(fetchSongs())
-  //   }
-  // }, [status, dispatch,])
+  
   return (
 
     <>
       {currSong ? (<>
-        {window.innerWidth <= 1000 ? <div className=" h-screen">
+        {window.innerWidth <= 1000 ? <div className=" h-screen min-h-screen">
           {/* container containing Thumbnail , progress bar , controls  */}
           <div className="p-1 shadow-sm shadow-teal-400  ">
             <Thumbnail />
@@ -39,7 +35,7 @@ const Musicplayer = () => {
             <Controls />
           </div>
           {/* the div that is going to display the lyrics  */}
-          <div onClick={() => console.log(currSong)} className="p-1 text-center w-2/3 bg-[#1e1e1e] bg-opacity-80 backdrop-blur-md rounded-xl overflow-y-scroll  text-gray-200 hide-scrollbar">
+          <div  className="p-1 text-center w-2/3 bg-[#1e1e1e] bg-opacity-80 backdrop-blur-md rounded-xl overflow-y-scroll  text-gray-200 hide-scrollbar">
             <p className="text-gray-200 font-bold text-lg ">lyrics</p>
           </div>
         </div>}

@@ -3,19 +3,21 @@ import axios from 'axios';
 
 // verifying the token for presistence
 export const verifyToken = createAsyncThunk(
-    'verify/token', async (token, thunkAPI) => {
+    'verify/token', async (thunkAPI) => {
         try {
-            const response = await axios.post('https://yibee.onrender.com/api/authenticate',token, {
-                headers: {
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${token}`
+            const token = localStorage.getItem("token")
+            const response = await axios.get('http://localhost:8080/api/auth/authenticate', {
+                withCredentials:true,
+                headers:{
+                    "Authorization":`Bearer ${token}`
                 }
-            });
+            })
             return response.data;
+
         } catch (error) {
             // alert(error);
             return thunkAPI.rejectWithValue(error.response.data);
-        }                                                                                                                                        
+        }
     }
 )
 
@@ -25,12 +27,12 @@ export const Signup = createAsyncThunk(
     'post/signupRqst',
     async (SignupData, thunkAPI) => {
         try {
-            const response = await axios.post('https://yibee.onrender.com/api/auth/signup', SignupData, {
+            const response = await axios.post('http://localhost:8080/api/auth/signup', SignupData, {
+                withCredentials: true,
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-            localStorage.setItem('token', response.data.token);
             return response.data;
         } catch (err) {
             return thunkAPI.rejectWithValue(err.response.data);
@@ -43,7 +45,8 @@ export const LoginRqst = createAsyncThunk(
     'post/loginRqst',
     async (LoginData, thunkAPI) => {
         try {
-            const response = await axios.post('https://yibee.onrender.com/api/auth/login', LoginData, {
+            const response = await axios.post('http://localhost:8080/api/auth/login', LoginData, {
+                withCredentials: true,
                 headers: {
                     'Content-Type': 'application/json',
 
@@ -52,6 +55,7 @@ export const LoginRqst = createAsyncThunk(
             localStorage.setItem('token', response.data.token);
             return response.data;
         } catch (err) {
+            console.log(err)
             return thunkAPI.rejectWithValue(err.response.data);
         }
     }
@@ -68,7 +72,7 @@ const AuthSlice = createSlice({
         error: null,
         userId: null,
         isAdmin: false,
-        sessionState:false,
+        sessionState: false,
     },
     reducers: {
         logout: (state, action) => {
@@ -76,9 +80,9 @@ const AuthSlice = createSlice({
             state.user = null;
             localStorage.removeItem('token')
         }
-        ,KeepLoggedIn:(state,action)=>{
-          state.loggedIn = true;
-          state.sessionState=true;
+        , KeepLoggedIn: (state, action) => {
+            state.loggedIn = true;
+            state.sessionState = true;
         }
         // SIGNUP CASES
     }, extraReducers: (builder) => {
@@ -103,10 +107,10 @@ const AuthSlice = createSlice({
             })
             .addCase(LoginRqst.fulfilled, (state, action) => {
                 state.loggedIn = true;
-                const status = sessionStorage.setItem("loginState",JSON.stringify(state.loggedIn));
+                const status = sessionStorage.setItem("loginState", JSON.stringify(state.loggedIn));
                 state.loginStatus = 'succeed';
-                state.isAdmin = action.payload.user.isAdmin
-                state.userId = action.payload.user.id; 
+                // state.isAdmin = action.payload.user.isAdmin
+                // state.userId = action.payload.user.id;
                 state.error = null;
             })
             .addCase(LoginRqst.rejected, (state, action) => {
@@ -117,10 +121,13 @@ const AuthSlice = createSlice({
             .addCase(verifyToken.rejected, (state) => {
                 state.loggedIn = false;
             })
-            .addCase(verifyToken.fulfilled, (state) => {
-                state.loggedIn = true;
+            .addCase(verifyToken.fulfilled, (state, action) => {
+                if (action.payload.message === "Authorized") {
+                    state.loggedIn = true;
+
+                }
             })
     }
 })
-export const { signup, log, logout ,KeepLoggedIn} = AuthSlice.actions
+export const { signup, log, logout, KeepLoggedIn } = AuthSlice.actions
 export default AuthSlice.reducer;

@@ -5,3 +5,8 @@
 .hide-scrollbar::-webkit-scrollbar {
     display: none;
 }
+
+@keyframes glow {
+    0%, 100% { text-shadow: 0 0 8px #fff, 0 0 16px #f0f; }
+    50% { text-shadow: 0 0 12px #0ff, 0 0 24px #0ff; }
+  }

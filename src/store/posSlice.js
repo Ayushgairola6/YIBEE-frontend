@@ -1,19 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
-const userToken = localStorage.getItem('token');
+import { getUser } from './userslice';
 const url = 'https://yibee.vercel.app/api/feed/posts?page={}'
 export const fetchPosts = createAsyncThunk(
     'posts/getPost',
-    async (_, thunkAPI,page) => {
+    async (_, thunkAPI, page) => {
         try {
-            const response = await axios.get(`https://yibee.onrender.com/api/feed/posts`,{
-                headers:{
+            const userToken = localStorage.getItem("token")
+            const response = await axios.get(`http://localhost:8080/api/feed/posts`, {
+                withCredentials: true,
+                headers: {
                     'Authorization': `Bearer ${userToken}`
                 }
             })
-            console.log(response.data)
-           
+
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -24,8 +24,9 @@ export const fetchPosts = createAsyncThunk(
 export const createPost = createAsyncThunk('posts/createPost',
     async (formData, thunkAPI) => {
         try {
-            const response = await axios.post('https://yibee.onrender.com/api/feed/newpost' , formData, {
-                headers: {
+            const userToken = localStorage.getItem('token');
+            const response = await axios.post('http://localhost:8080/api/feed/newpost', formData, {
+                withCredentials: true, headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${userToken}`
                 }
@@ -40,9 +41,11 @@ export const createPost = createAsyncThunk('posts/createPost',
 export const Likepost = createAsyncThunk('posts/LikePost',
     async (p, thunkAPI) => {
         try {
+            const userToken = localStorage.getItem('token');
+
             const id = p._id;
-            const response = await axios.patch(`https://yibee.onrender.com/api/feed/update/${id}`, userToken, {
-                headers: {
+            const response = await axios.patch(`http://localhost:8080/api/feed/update/${id}`, userToken, {
+                withCredentials: true, headers: {
                     'Authorization': `Bearer ${userToken}`
                 }
             });
@@ -56,14 +59,21 @@ export const Likepost = createAsyncThunk('posts/LikePost',
 export const DeletePost = createAsyncThunk('posts/DeletePost',
     async (p, thunkAPI) => {
         try {
-            const response = await axios.delete(`https://yibee.onrender.com/api/feed/post/${p._id}`, {
-                headers: {
+            console.log(p)
+            const userToken = localStorage.getItem('token');
+
+            const response = await axios.delete(`http://localhost:8080/api/feed/post/${p._id}`, {
+                withCredentials: true, headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${userToken}`
                 }
             });
-            return response.data;
+            if(response.data.message==="Post deleted"){
+                const userdata = await thunkAPI.dispatch(getUser())
+                return userdata;
+            }
         } catch (err) {
+            console.log(err)
             return thunkAPI.rejectWithValue(err.response.data);
         }
     }
@@ -82,7 +92,7 @@ const createPostSlice = createSlice({
         likedCalled: null,
     }, reducers: {
         unlike: (p, state) => {
-            console.log()
+
 
         }
     },
@@ -110,15 +120,15 @@ const createPostSlice = createSlice({
             })
             //likePosts
             .addCase(Likepost.pending, (state) => {
-                console.log('')
+                ('')
                 state.likedCalled = "wait"
 
             })
             .addCase(Likepost.fulfilled, (state, action) => {
-                // console.log(state.posts)
+                // (state.posts)
                 state.likedCalled = null
                 const likedPostId = action.payload._id;
-                // console.log(action.payload) 
+                // (action.payload) 
                 const isAlreadyLike = state.likedPosts.includes(likedPostId)
                 if (isAlreadyLike) {
                     state.likedPosts = state.likedPosts.filter((id) => id !== likedPostId)
@@ -127,7 +137,7 @@ const createPostSlice = createSlice({
                 }
                 localStorage.setItem('likedPosts', JSON.stringify(state.likedPosts))
                 // Update the post in the `posts` array with the new like count
-                const index = state.posts.findIndex((post) => post._id=== likedPostId);
+                const index = state.posts.findIndex((post) => post._id === likedPostId);
                 if (index !== -1) {
                     state.posts[index] = action.payload;
                 }

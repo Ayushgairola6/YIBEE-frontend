@@ -6,13 +6,14 @@ export const fetchSongs = createAsyncThunk(
     'songs/fetchSongs',
     async (_, thunkAPI) => {
         try {
-            const response = await axios.get("https://yibee.onrender.com/api/music/songs", {
-                headers: {
+            const response = await axios.get("http://localhost:8080/api/music/songs", {
+                  withCredentials: true,
+                  headers: {
+                    
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
                 }
             });
-            // console.log(response.data)
             return response.data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.response.data);
@@ -25,8 +26,9 @@ export const fetchGenre = createAsyncThunk(
     'songs/fetchCategory',
     async (genre, thunkAPI) => {
         try {
-            const response = await axios.get(`https://yibee.onrender.com/api/music/genre/${genre}`, {
-                headers: {
+            const response = await axios.get(`http://localhost:8080/api/music/genre/${genre}`, {
+                withCredentials: true,
+                  headers: {
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
                 }
@@ -43,8 +45,8 @@ export const SearchSongs = createAsyncThunk(
     'songs/SearchSongs',
     async (query, thunkAPI) => {
         try {
-            const response = await axios.get(`https://yibee.onrender.com/api/music/search/${query}`, {
-                headers: {
+            const response = await axios.get(`http://localhost:8080/api/music/search/${query}`, {
+                withCredentials: true,  headers: {
                     'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
                 }
@@ -77,8 +79,9 @@ const MusicSlice = createSlice({
     initialState,
     reducers: {
         setCurrSong: (state, action) => {
-            console.log('called');
+            ('called');
             state.currSong = state.fetchedSongs[0];
+            state.isPlaying = !state.isPlaying;
         },
         togglePlayPause: (state) => {
             state.isPlaying = !state.isPlaying;

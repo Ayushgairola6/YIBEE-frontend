@@ -22,6 +22,8 @@ const Controls = () => {
     return `${minutes}:${seconds}s`;
   };
 
+
+
   useEffect(() => {
     if (currSong) {
       progress.current.max = audioRef.current?.duration || 0;
@@ -33,7 +35,7 @@ const Controls = () => {
         progress.current.value = audioRef.current.currentTime;
       }
     }, 500);
-
+    audioRef.current.play()
     return () => clearInterval(interval);
   }, [currSong]);
 
@@ -65,12 +67,12 @@ const Controls = () => {
   function handlePrevSong() {
     dispatch(prevSong());
     dispatch(fetchSongs());
-    dispatch(togglePlayPause());
+    // dispatch(togglePlayPause());
   }
   function handleNextSong() {
     dispatch(nextSong());
     dispatch(fetchSongs());
-    dispatch(togglePlayPause());
+    // dispatch(togglePlayPause());
   }
 
   // FUNCTION THAT CHANGES MUSIC WHEN THE CURRENT SONG HAS ENDED 
@@ -82,7 +84,7 @@ const Controls = () => {
   return (
     <>
 
-{currSong?<><div className="w-full flex items-center justify-between p-2 cursor-pointer">
+      {currSong ? <><div className="w-full flex items-center justify-between p-2 cursor-pointer">
         <span className="shadow-md shadow-black rounded-lg px-1 font-bold font-mono bg-gray-400">{time}</span>
         <input
           onChange={handleSeek}
@@ -94,33 +96,33 @@ const Controls = () => {
           className="w-2/3 appearance-none h-1 bg-white shadow-black shadow-md rounded-md cursor-pointer"
         />
       </div>
-      <div  className="  h-16 flex items-center justify-evenly font-bold text-xl text-center rounded-xl shadow-md shadow-black bg-teal-300 bg-opacity-80 backdrop-blur-md ">
-        <audio onEnded={() => handleEnd()} src={currSong.url} ref={audioRef}>
-          <source src={currSong.url} type="audio/mpeg" />
-        </audio>
-        <div className="bg-white cursor-pointer shadow-md shadow-black rounded-xl h-8 w-8 text-center flex items-center justify-center">
-          <span className="text-xl text-center">
-            <FaBackward onClick={handlePrevSong} />
-          </span>
+        <div className="  h-16 flex items-center justify-evenly font-bold text-xl text-center rounded-xl shadow-md shadow-black bg-teal-300 bg-opacity-80 backdrop-blur-md ">
+          <audio onEnded={() => handleEnd()} src={currSong.url} ref={audioRef}>
+            <source src={currSong.url} type="audio/mpeg" />
+          </audio>
+          <div className="bg-white cursor-pointer shadow-md shadow-black rounded-xl h-8 w-8 text-center flex items-center justify-center">
+            <span className="text-xl text-center">
+              <FaBackward onClick={handlePrevSong} />
+            </span>
+          </div>
+          <div
+            className="cursor-pointer shadow-md shadow-black rounded-xl h-8 w-8 text-center bg-white flex items-center justify-center"
+            onClick={handlePlayPause}
+          >
+            <span className="text-xl text-center">
+              {isPlaying ? <FaPause /> : <FaPlay />}
+            </span>
+          </div>
+          <div className="bg-white cursor-pointer shadow-md shadow-black rounded-xl h-8 w-8 flex items-center justify-center">
+            <span className="text-xl text-center">
+              <FaForward onClick={handleNextSong} />
+            </span>
+          </div>
         </div>
-        <div
-          className="cursor-pointer shadow-md shadow-black rounded-xl h-8 w-8 text-center bg-white flex items-center justify-center"
-          onClick={handlePlayPause}
-        >
-          <span className="text-xl text-center">
-            {isPlaying ? <FaPause /> : <FaPlay />}
-          </span>
-        </div>
-        <div className="bg-white cursor-pointer shadow-md shadow-black rounded-xl h-8 w-8 flex items-center justify-center">
-          <span className="text-xl text-center">
-            <FaForward onClick={handleNextSong} />
-          </span>
-        </div>
-      </div>
       </>
-:<LoadingCard/>
-}
-      
+        : <LoadingCard />
+      }
+
     </>
   );
 };
