@@ -31,19 +31,23 @@ function App() {
 
   // check if the token is expired or not to keep the user engaged
   useEffect(() => {
-    dispatch(verifyToken())
-  }, [dispatch])
+    const message = dispatch(verifyToken())
+    if (message.message === "Authorized") {
+      dispatch(getUser());
+      dispatch(fetchSongs());
+      dispatch(fetchPosts())
+    }
+  }, [])
 
-// the slight loading effect
+  // the slight loading effect
   useEffect(() => {
     const time = setTimeout(() => {
       setDelay(false);
-    }, 4000)
+    }, 3000)
 
-    return () => {
-      clearTimeout(time);
-    }
-  }, [delay])
+    return () => clearTimeout(time);
+
+  }, [])
 
   // POSTS AND SONGS FETCHED STATUS 
   const fetchStatus = useSelector(state => state.posts.isFetched);
@@ -51,7 +55,8 @@ function App() {
   const user = useSelector(state => state.user.user);
 
   useEffect(() => {
-    if (LoggedInStatus === true) {
+    const token = localStorage.getItem("token")
+    if (LoggedInStatus === true && token) {
       dispatch(getUser());
       dispatch(fetchSongs());
       dispatch(fetchPosts())
@@ -132,34 +137,34 @@ function App() {
     // </div>
 
     return <div className="h-screen relative flex flex-col items-center justify-center text-white text-2xl overflow-hidden">
-    {/* Background image */}
-    <img
-      src="https://img.freepik.com/free-photo/cyberpunk-urban-scenery_23-2150712616.jpg?t=st=1745571052~exp=1745574652~hmac=77fa2ba8e5011361a273178bbbb3c7930619d1253dc306ecc546fde7902a057c&w=1380"
-      alt="cyberpunk city"
-      className="absolute inset-0 w-full h-full object-cover z-0 opacity-80"
-    />
-  
-    {/* Dark overlay for better text contrast */}
-    <div className="absolute inset-0 bg-black/50 z-0" />
-  
-    {/* Centered Text */}
-    <div className="z-10 flex flex-col items-center text-center px-4">
-      <h1
-        className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-400 to-yellow-400 drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]"
-        style={{ fontFamily: "Orbitron, sans-serif" }}
-      >
-        BECOME ONE WITH
-      </h1>
-  
-      <span
-        className="mt-2 text-lg md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-300 to-purple-500 drop-shadow-[0_0_6px_rgba(255,255,255,0.6)] tracking-wide animate-pulse"
-        style={{ fontFamily: "Orbitron, sans-serif" }}
-      >
-        MUSIC
-      </span>
+      {/* Background image */}
+      <img
+        src="https://img.freepik.com/free-photo/cyberpunk-urban-scenery_23-2150712616.jpg?t=st=1745571052~exp=1745574652~hmac=77fa2ba8e5011361a273178bbbb3c7930619d1253dc306ecc546fde7902a057c&w=1380"
+        alt="cyberpunk city"
+        className="absolute inset-0 w-full h-full object-cover z-0 opacity-80"
+      />
+
+      {/* Dark overlay for better text contrast */}
+      <div className="absolute inset-0 bg-black/50 z-0" />
+
+      {/* Centered Text */}
+      <div className="z-10 flex flex-col items-center text-center px-4">
+        <h1
+          className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-purple-400 to-yellow-400 drop-shadow-[0_0_12px_rgba(255,255,255,0.9)]"
+          style={{ fontFamily: "Orbitron, sans-serif" }}
+        >
+          BECOME ONE WITH
+        </h1>
+
+        <span
+          className="mt-2 text-lg md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-cyan-300 to-purple-500 drop-shadow-[0_0_6px_rgba(255,255,255,0.6)] tracking-wide animate-pulse"
+          style={{ fontFamily: "Orbitron, sans-serif" }}
+        >
+          MUSIC
+        </span>
+      </div>
     </div>
-  </div>
-  
+
 
 
 

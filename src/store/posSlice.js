@@ -59,7 +59,6 @@ export const Likepost = createAsyncThunk('posts/LikePost',
 export const DeletePost = createAsyncThunk('posts/DeletePost',
     async (p, thunkAPI) => {
         try {
-            console.log(p)
             const userToken = localStorage.getItem('token');
 
             const response = await axios.delete(`https://yibee.onrender.com/api/feed/post/${p._id}`, {

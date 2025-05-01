@@ -1,25 +1,36 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
-
+import getUser from './userslice';
+import fetchPosts from './posSlice';
+import fetchSongs from './musicSlice';
 // verifying the token for presistence
 export const verifyToken = createAsyncThunk(
-    'verify/token', async (thunkAPI) => {
+    'verify/token', async (_,thunkAPI) => {
         try {
             const token = localStorage.getItem("token")
             const response = await axios.get('https://yibee.onrender.com/api/auth/authenticate', {
-                withCredentials:true,
-                headers:{
-                    "Authorization":`Bearer ${token}`
+                withCredentials: true,
+                headers: {
+                    "Authorization": `Bearer ${token}`
                 }
             })
-            return response.data;
+            if (response.data.message === "Authorized") {
 
-        } catch (error) {
+                // thunkAPI.dispatch(getUser());
+                // thunkAPI.dispatch(fetchSongs());
+                // thunkAPI.dispatch(fetchPosts());
+                return response.data
+            }
+        }
+
+         catch (error) {
             // alert(error);
+            console.log(error)
+
             return thunkAPI.rejectWithValue(error.response.data);
         }
     }
-)
+);
 
 
 // SIGNUP REQUEST TO THE SERVER
@@ -55,7 +66,6 @@ export const LoginRqst = createAsyncThunk(
             localStorage.setItem('token', response.data.token);
             return response.data;
         } catch (err) {
-            console.log(err)
             return thunkAPI.rejectWithValue(err.response.data);
         }
     }
@@ -124,7 +134,6 @@ const AuthSlice = createSlice({
             .addCase(verifyToken.fulfilled, (state, action) => {
                 if (action.payload.message === "Authorized") {
                     state.loggedIn = true;
-
                 }
             })
     }

@@ -1,21 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const token = localStorage.getItem('token')
 export const fetchSongs = createAsyncThunk(
     'songs/fetchSongs',
     async (_, thunkAPI) => {
         try {
+const token = localStorage.getItem('token')
             const response = await axios.get("https://yibee.onrender.com/api/music/songs", {
                   withCredentials: true,
                   headers: {
                     
-                    'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
                 }
             });
             return response.data;
         } catch (error) {
+            console.log(error)
             return thunkAPI.rejectWithValue(error.response.data);
         }
     }
@@ -26,16 +26,19 @@ export const fetchGenre = createAsyncThunk(
     'songs/fetchCategory',
     async (genre, thunkAPI) => {
         try {
+const token = localStorage.getItem('token')
+
             const response = await axios.get(`https://yibee.onrender.com/api/music/genre/${genre}`, {
                 withCredentials: true,
                   headers: {
-                    'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
                 }
             });
 
             return response.data;
         } catch (error) {
+            console.log(error)
+
             return thunkAPI.rejectWithValue(error.response.data);
         }
     }
@@ -45,15 +48,18 @@ export const SearchSongs = createAsyncThunk(
     'songs/SearchSongs',
     async (query, thunkAPI) => {
         try {
+const token = localStorage.getItem('token')
+
             const response = await axios.get(`https://yibee.onrender.com/api/music/search/${query}`, {
                 withCredentials: true,  headers: {
-                    'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
                 }
             });
 
             return response.data;
         } catch (error) {
+            console.log(error)
+
             return thunkAPI.rejectWithValue(error.response.data);
         }
     }

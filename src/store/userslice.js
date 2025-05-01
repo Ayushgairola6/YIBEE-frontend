@@ -10,7 +10,6 @@ export const getUser = createAsyncThunk(
 
             const response = await axios.get("https://yibee.onrender.com/api/account/data", {
                 withCredentials: true, headers: {
-                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 }
             });
@@ -26,9 +25,10 @@ export const AddToPlaylist = createAsyncThunk(
     'user/AddSong',
     async (currSong, thunkAPI) => {
         try {
+            const token = localStorage.getItem("token")
+
             const response = await axios.patch("https://yibee.onrender.com/api/music/song", currSong, {
                 withCredentials: true, headers: {
-                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 }
             });
@@ -46,18 +46,18 @@ export const AddProfilePicture = createAsyncThunk(
             const token = localStorage.getItem("token")
             const response = await axios.patch(`https://yibee.onrender.com/api/account/update`, formData, {
                 withCredentials: true, headers: {
-                    'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
                 }
             });
             if (response.data.message === "done") {
                 const userData = await thunkAPI.dispatch(getUser()).unwrap();
-                return userData; 
+                return userData;
             }
 
             return thunkAPI.rejectWithValue("Upload failed");
         } catch (error) {
-            (error);
+            console.log(error);
+
             return thunkAPI.rejectWithValue(error.response.data);
         }
     }
@@ -72,7 +72,6 @@ export const AddCoverPicture = createAsyncThunk(
             const response = await axios.patch(`https://yibee.onrender.com/api/account/cover`, formData, {
                 withCredentials: true,
                 headers: {
-                    'Content-Type': 'multipart/formData',
                     'Authorization': `Bearer ${token}`
                 }
             });
