@@ -3,10 +3,10 @@ import { DeletePost } from "../store/posSlice";
 import { getUser } from "../store/userslice";
 
 
-const ConfirmBox = ({selectedPost,setIsClicked}) => {
+const ConfirmBox = ({ selectedPost, setIsClicked }) => {
 
-const dispatch = useDispatch()
-    
+    const dispatch = useDispatch()
+
     async function FinalDelete(selectedPost) {
         if (!selectedPost) {
             alert("no posts")
@@ -20,9 +20,12 @@ const dispatch = useDispatch()
 
 
     return (<>
-        <div  className="absolute m-auto inset-0 h-32 flex items-center justify-center gap-12 px-36 py-28 bg-white w-36 ">
-            <button className=" rounded-lg border-red-700 px-4 py-2 font-semibold bg-red-300 text-red-700" onClick={()=>FinalDelete(selectedPost)}>Yes</button>
-            <button className="p-1 rounded-lg border-sky-700 px-4 py-2 font-semibold bg-sky-300 text-sky-700 "onClick={()=>setIsClicked(false)}>No</button>
+        <div className="h-full flex items-center justify-center bg-black bg-opacity-50 absolute top-0 left-0 w-full backdrop-blur-sm">
+            <div className="  h-32 flex items-center justify-center gap-12  bg-black w-36 rounded-xl py-32 px-48 border border-indigo-600">
+                <button className=" rounded-xl border bg-white text-black px-6 py-2 font-semibold hover:bg-black hover:text-white transition-all duration-300" onClick={() => FinalDelete(selectedPost)}>Yes</button>
+                <button className="p-1 rounded-xl text-white px-6 py-2 font-semibold border  hover:bg-gray-400 transition-all duration-300" onClick={() => setIsClicked(false)}>No</button>
+            </div>
+
         </div>
 
 

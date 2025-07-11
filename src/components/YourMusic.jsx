@@ -23,7 +23,7 @@ const YourMusic = () => {
 
   const audioRef = useRef();
   const progress = useRef();
-
+  const songRef = useRef();
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
@@ -46,10 +46,10 @@ const YourMusic = () => {
         setTime(formatTime(audioRef.current.currentTime));
         progress.current.value = audioRef.current.currentTime;
       }
-    }, 500);
+    }, 600);
 
     return () => clearInterval(interval);
-  }, [songDetail]);
+  }, [audioRef.current]);
 
 
 
@@ -60,47 +60,61 @@ const YourMusic = () => {
     if (audioRef.current) {
       audioRef.current.currentTime = progress.current.value;
       if (isPlaying === true) {
-        audioRef.current.play(); // Only play if it was already playing
-      }
-    }
-  }
-
-
-
-
-  async function chooseSong(song) {
-    await setSongDetail(song);
-    setIsPlaying(true)
-    if (song) {
-      if (isPlaying === false) {
         audioRef.current.play();
-        progress.current.max = audioRef.current?.duration || 0;
       }
-    } else {
-      return;
-    }
-
-
-  }
-
-  async function pause() {
-    setIsPlaying(false)
-    if (isPlaying === true) {
-      await audioRef.current.pause();
     }
   }
+
+  function PlaySongOnSelect(song) {
+    let time;
+    setSongDetail(song);
+    if (isPlaying === false) {
+      // setSongDetail(song);
+      setIsPlaying(true);
+      audioRef.current.play();
+    } else if (isPlaying === true) {
+      setSongDetail(song);
+      audioRef.current.pause();
+      time = setTimeout(() => {
+        audioRef.current.play();
+      }, 600)
+    }
+    return () => clearTimeout(time);
+  }
+
+  //   useEffect(() => {
+  //  let time;
+  //     setSongDetail(song);
+  //     if (isPlaying === false) {
+  //       // setSongDetail(song);
+  //       setIsPlaying(true);
+  //       audioRef.current.play();
+  //     } else if (isPlaying === true) {
+  //       setSongDetail(song);
+  //       audioRef.current.pause();
+  //       time = setTimeout(() => {
+  //         audioRef.current.play();
+  //       }, 600)
+  //     }
+  //     return () => clearTimeout(time);
+  //   }, [songDetail])
+
+
+
   return (
     <>
-      <h2 className="text-center text-lg text-white font-bold flex items-center justify-center gap-2 ">Your Playlist <BiHeadphone /></h2>
+      <h2 className="text-center text-lg text-white font-bold w-full flex items-center justify-center gap-2 ">Your Playlist <BiHeadphone /></h2>
       {user ? (<>
 
 
-        <div className="h-full w-full flex items-center justify-between px-3   overflow-x-hidden">
+        <div className="h-full w-full flex items-center justify-between px-3   overflow-x-hidden relative">
 
           {/* CONTAINER TO HOLD THE SONGS ADDED BY THE USER IN HIS PLAYLIST */}
-          <div className="min-h-screen max-h-screen overflow-y-auto w-full max-w-2xl  shadow-sm shadow-teal-500 text-white font-semibold text-lg items-center justify-center no-scrollbar max-lg:text-xs  ">
+          <div className="min-h-screen   w-full   border border-gray-800 rounded-xl text-white font-semibold text-lg items-center justify-center no-scrollbar max-lg:text-xs  overflow-y-auto">
             {user !== null && user?.playlist ? user.playlist.map((song) => {
-              return <ul key={song._id} className="shadow-sm shadow-teal-600 flex items-center justify-between px-2 my-2 flex-wrap"> <span>{song.title}</span> <span>{song.artist}</span> <span>{isPlaying === true && songDetail._id === song._id ? <FaPause onClick={pause} /> : <FaPlay onClick={() => chooseSong(song)} />}</span></ul>
+              return <ul ref={songRef} onClick={() => PlaySongOnSelect(song)} key={song._id} className={` flex items-center justify-between px-2 my-2 flex-wrap cursor-pointer ${songDetail._id === song._id && isPlaying === true ? "text-teal-600" : "text-white"} 
+              border-b border-indigo-800 py-1 font-bold font-serif`}>
+                <img className="h-7 w-7 rounded-full" src={song.thumbnail} alt="" /> <span>{song.title}</span> <span>Artist-{song.artist}</span> </ul>
 
 
             }) : null}
@@ -108,35 +122,44 @@ const YourMusic = () => {
 
           </div>
           {/* CONTAINER TO DISPLAY THE IMAGE AND DATA OF THE SONG THATS IS BEING PLAYED */}
-          {songDetail ? <div className="p-2 flex flex-col m-auto max-w-64 items-center  justify-center gap-5 rounded-2xl shadow-md shadow-teal-400 max-lg:w-24  max-lg:h-fit max-lg:gap-1 max-lg:text-xs max-lg:p-1">
-            <div className="h-32 w-32 max-lg:h-20 max-lg:w-20">
-              <img className="h-full w-full bg-black rounded-xl border-b border-teal-400 " src={songDetail.thumbnail} alt="" />
-            </div>
-            {/* div containing the song details */}
-            <div className="flex flex-col items-center justify-center gap-1 text-white font-bold text-md  p-2">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-300 to-cyan-400 border-b-2 border-b-teal-300"><span className="text-white">Title :</span>{songDetail.title}</span>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-300 to-cyan-400 flex-wrap border-b-2 border-b-teal-300"><span className="text-white">Artist :</span>{songDetail.artist}</span>
+          {songDetail ? <div className="flex items-center justify-between  gap-2 absolute bottom-0 left-0  bg-black border-t border-gray-500 w-full py-1 px-3">
+            <img src={songDetail.thumbnail} className="h-10 w-10 rounded-full animate-spin-slow" alt="/" />
 
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-300 to-cyan-400 border-b-2 border-b-teal-300"><span className="text-white">Streams : </span>{songDetail.streams}</span>
-              {/* the progress bar */}
-              <div className="w-full flex items-center justify-between p-2 cursor-pointer ">
-                <span className="shadow-md shadow-black rounded-lg px-1 bg-gray-400">{time}</span>
-                <input
-                  onChange={handleSeek}
-                  ref={progress}
-                  min="0"
-                  max="1"
-                  type="range"
-                  step="0.01"
-                  className="w-2/3 appearance-none h-1 bg-white shadow-black shadow-md rounded-md cursor-pointer"
-                />
-                <audio onEnded={() => handleEnd()} src={songDetail.url} ref={audioRef}>
-                  <source src={songDetail.url} type="audio/mpeg" />
-                </audio>
-              </div>
+
+            <div className="flex  items-center justify-evenly gap-2 w-1/2">
+              <span className="shadow-md shadow-black rounded-lg px-1 bg-gray-400">{time}</span>
+              <input
+                onChange={handleSeek}
+                ref={progress}
+                min="0"
+                max="100"
+                type="range"
+                step="0.01"
+                className="w-full appearance-none h-1 bg-white shadow-black shadow-md rounded-md cursor-pointer"
+              />
+              <audio onEnded={() => handleEnd()} src={songDetail.url} ref={audioRef}>
+                <source src={songDetail.url} type="audio/mpeg" />
+              </audio>
+              {isPlaying === false ? <FaPlay onClick={() => {
+                if (isPlaying === false) {
+                  setIsPlaying(true);
+                  audioRef.current.play();
+                }
+              }} className="cursor-pointer" color="white" /> : <FaPause className="cursor-pointer" color="white" onClick={() => {
+                if (isPlaying === true) {
+                  setIsPlaying(false);
+                  setSongDetail(currSong)
+                  audioRef.current.pause();
+                }
+              }} />}
             </div>
 
-          </div> : <span>loading...</span>}
+
+
+
+          </div> : <div className="h-screen flex items-center justify-center ">
+            <span className="text-white font-bold font-serif text-2xl animate-pulse">Looking for you favorites</span>
+          </div>}
 
         </div>
 

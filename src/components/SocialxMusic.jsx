@@ -14,9 +14,9 @@ const Display = () => {
       <SocialMedia></SocialMedia>
 
       {/* this  is the music player part  */}
-      <div className="py-1 px-1 h-screen w-full ">
+      <div className="py-1 px-1 h-screen w-full relative">
         <Musicplayer></Musicplayer>
-        <ForYou></ForYou>
+        <ul className="absolute bottom-0 left-0 w-full"><ForYou/></ul>
       </div>
       
     </div>

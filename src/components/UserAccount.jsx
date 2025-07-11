@@ -8,7 +8,7 @@ import { FiArrowUpRight } from "react-icons/fi";
 import Loader from "./Loader";
 import ConfirmBox from "./ConfirmationBox";
 import LoadingImage from "./LoadingImage";
-
+import { BiTrash } from "react-icons/bi";
 const UserAccount = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [mouseOver, setMouseOver] = useState(false);
@@ -52,6 +52,25 @@ const UserAccount = () => {
     setProfilePreview(null);
   };
 
+  function HandleEditProfile() {
+    if (UserImage.current.files[0]) {
+      const formData = new FormData();
+      formData.append('image', UserImage.current.files[0]);
+      formData.append('type', "ProfilePhoto");
+      dispatch(AddProfilePicture(formData));
+      // return;
+    } else if (Cover.current.files[0]) {
+      const formData = new FormData();
+      formData.append('image', Cover.current.files[0]);
+      formData.append('type', "coverPhoto");
+      dispatch(AddProfilePicture(formData));
+      // return;
+    } else {
+      return;
+    }
+
+  }
+
   const AddCover = () => {
     if (!Cover.current.files[0]) return;
     const formData = new FormData();
@@ -66,8 +85,8 @@ const UserAccount = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      {User===null && User?.posts ? (
+    <div className="min-h-screen bg-black text-white p-6">
+      {User === null && User?.posts ? (
         <div className="flex flex-col items-center justify-center h-full space-y-4">
           <h1 className="text-xl text-sky-400">Loading your account...</h1>
           <Loader />
@@ -77,26 +96,30 @@ const UserAccount = () => {
           {/* Cover Section */}
           <div className="relative mb-8 rounded-2xl overflow-hidden shadow-xl">
             <div className="h-48 bg-gradient-to-r from-indigo-800 via-purple-700 to-indigo-900 flex items-center justify-center relative">
-              {CoverLoading === "isLoading" ?<div className="h-full w-full rounded-full absolute top-2 left-0 flex items-center justify-center">
-                    <div className="h-10 w-10 rounded-full border-t-4 border-white animate-spin"></div>
-                  </div> : (
-                <img 
+              {CoverLoading === "isLoading" ? <div className="h-full w-full rounded-full absolute top-2 left-0 flex items-center justify-center">
+                <div className="h-10 w-10 rounded-full border-t-4 border-white animate-spin"></div>
+              </div> : (
+                <img
                   className="object-cover w-full h-full opacity-90"
-                  src={User?.coverPhoto?User.coverPhoto:"/" 
-                    } 
+                  src={User?.coverPhoto ? User.coverPhoto : "/"
+                  }
                   alt="Cover"
                 />
               )}
             </div>
             <div className="absolute top-4 right-4 flex items-center space-x-2">
               {coverPreview && <img className="w-12 h-12 rounded-full border-2 border-sky-400" src={coverPreview} alt="preview" />}
-              <label htmlFor="cover-upload" className="cursor-pointer p-2 bg-indigo-600 rounded-full hover:bg-indigo-500 transition">
+              {/* <label htmlFor="cover-upload" className="cursor-pointer p-1 bg-purple-700 rounded-full hover:bg-indigo-500 transition">
                 <BiPlus size={20} />
                 <input onChange={ImagePreview} ref={Cover} id="cover-upload" type="file" className="hidden" />
               </label>
-              <button onClick={AddCover} className="px-4 py-2 bg-sky-500 text-gray-900 rounded-lg hover:bg-sky-400 transition">
+              <button onClick={AddCover} className="px-4 py-2 bg-black rounded-lg text-white hover:bg-white hover:text-black transition">
                 Upload Cover
-              </button>
+              </button> */}
+              <label htmlFor="cover-upload" className="cursor-pointer p-1 bg-purple-700 rounded-full hover:bg-indigo-500 transition">
+                <BiPlus size={20} />
+                <input onChange={ImagePreview} ref={Cover} id="cover-upload" type="file" className="hidden" />
+              </label>
             </div>
           </div>
 
@@ -109,10 +132,10 @@ const UserAccount = () => {
                     <div className="h-10 w-10 rounded-full border-t-4 border-white animate-spin"></div>
                   </div>
                 ) : (
-                  <img 
+                  <img
                     className="w-full h-full object-cover rounded-full"
-                    src={User?.image?User.image:"/" 
-                    } 
+                    src={User?.image ? User.image : "/"
+                    }
                     alt="Profile"
                   />
                 )}
@@ -123,7 +146,7 @@ const UserAccount = () => {
                   <BiPlus size={18} />
                   <input onChange={ImagePreview} ref={UserImage} id="profile-upload" type="file" className="hidden" />
                 </label>
-                <button onClick={AddImage} className="px-3 py-1 bg-sky-500 text-gray-900 rounded-lg hover:bg-sky-400 transition text-sm">
+                <button onClick={HandleEditProfile} className="px-3 py-1 bg-black rounded-lg text-white hover:bg-white hover:text-black transition text-sm ">
                   Upload
                 </button>
               </div>
@@ -131,8 +154,9 @@ const UserAccount = () => {
             <div>
               <h2 className="text-3xl font-bold text-indigo-300">{User.username}</h2>
               <p className="text-sky-300">{User.email}</p>
-              <button 
-                onClick={() => dispatch(logout())} 
+              <p>jkdsjfkds</p>
+              <button
+                onClick={() => dispatch(logout())}
                 className="mt-3 inline-flex items-center space-x-1 px-4 py-2 bg-red-600 rounded-lg hover:bg-red-500 transition text-sm"
               >
                 <span>Logout</span><FiArrowUpRight />
@@ -142,26 +166,26 @@ const UserAccount = () => {
 
           {/* Posts Grid Section */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 border-t border-indigo-500 py-2">
-            {User!==null && User?.posts ? User.posts.map((post) => (
-              <div 
+            {User !== null && User?.posts ? User.posts.map((post) => (
+              <div
                 key={post._id}
                 onMouseEnter={() => { setMouseOver(true); setHoverdPost(post); }}
                 onMouseLeave={() => setMouseOver(false)}
-                className="relative bg-gray-800 p-4 rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden "
+                className="relative bg-gradient-to-br from-white/5 to-white/10 p-4 rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden "
               >
                 {mouseOver && hoveredPost._id === post._id && (
-                  <button 
-                    onClick={() => showConfirmation(post)} 
+                  <button
+                    onClick={() => showConfirmation(post)}
                     className="absolute top-3 right-3 p-1 bg-red-500 rounded-full hover:bg-red-400 transition"
                   >
-                    <MdClose size={18} color="white" />
+                    <BiTrash size={18} color="white" />
                   </button>
                 )}
                 <img className="w-full h-40 object-cover rounded-xl mb-3" src={post.images} alt={post.title} />
-                <p className="text-indigo-300 font-semibold">Mood: {post.Mood || 'N/A'}</p>
-                <p className="text-sky-300 font-semibold truncate">Title: {post.title || 'Untitled'}</p>
+                <p className="text-indigo-300 font-semibold">{post.Mood || 'N/A'}</p>
+                <p className="text-sky-300 font-semibold truncate">{post.title || 'Untitled'}</p>
               </div>
-            )):null}
+            )) : null}
           </div>
 
           {/* Confirm Box */}

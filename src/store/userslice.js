@@ -8,7 +8,7 @@ export const getUser = createAsyncThunk(
         try {
             const token = localStorage.getItem('token')
 
-            const response = await axios.get("https://yibee.onrender.com/api/account/data", {
+            const response = await axios.get("http://localhost:8080/api/account/data", {
                 withCredentials: true, headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -27,7 +27,7 @@ export const AddToPlaylist = createAsyncThunk(
         try {
             const token = localStorage.getItem("token")
 
-            const response = await axios.patch("https://yibee.onrender.com/api/music/song", currSong, {
+            const response = await axios.patch("http://localhost:8080/api/music/song", currSong, {
                 withCredentials: true, headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -43,8 +43,9 @@ export const AddProfilePicture = createAsyncThunk(
     'user/AddProfilePic',
     async (formData, thunkAPI) => {
         try {
+            // console.log(formData)
             const token = localStorage.getItem("token")
-            const response = await axios.patch(`https://yibee.onrender.com/api/account/update`, formData, {
+            const response = await axios.put(`http://localhost:8080/api/account/update`, formData, {
                 withCredentials: true, headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -69,7 +70,7 @@ export const AddCoverPicture = createAsyncThunk(
         try {
             const token = localStorage.getItem("token")
 
-            const response = await axios.patch(`https://yibee.onrender.com/api/account/cover`, formData, {
+            const response = await axios.patch(`http://localhost:8080/api/account/cover`, formData, {
                 withCredentials: true,
                 headers: {
                     'Authorization': `Bearer ${token}`

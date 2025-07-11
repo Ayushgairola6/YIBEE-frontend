@@ -7,7 +7,7 @@ export const fetchPosts = createAsyncThunk(
     async (_, thunkAPI, page) => {
         try {
             const userToken = localStorage.getItem("token")
-            const response = await axios.get(`https://yibee.onrender.com/api/feed/posts`, {
+            const response = await axios.get(`http://localhost:8080/api/feed/posts`, {
                 withCredentials: true,
                 headers: {
                     'Authorization': `Bearer ${userToken}`
@@ -25,7 +25,7 @@ export const createPost = createAsyncThunk('posts/createPost',
     async (formData, thunkAPI) => {
         try {
             const userToken = localStorage.getItem('token');
-            const response = await axios.post('https://yibee.onrender.com/api/feed/newpost', formData, {
+            const response = await axios.post('http://localhost:8080/api/feed/newpost', formData, {
                 withCredentials: true, headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${userToken}`
@@ -44,7 +44,7 @@ export const Likepost = createAsyncThunk('posts/LikePost',
             const userToken = localStorage.getItem('token');
 
             const id = p._id;
-            const response = await axios.patch(`https://yibee.onrender.com/api/feed/update/${id}`, userToken, {
+            const response = await axios.patch(`http://localhost:8080/api/feed/update/${id}`, userToken, {
                 withCredentials: true, headers: {
                     'Authorization': `Bearer ${userToken}`
                 }
@@ -61,7 +61,7 @@ export const DeletePost = createAsyncThunk('posts/DeletePost',
         try {
             const userToken = localStorage.getItem('token');
 
-            const response = await axios.delete(`https://yibee.onrender.com/api/feed/post/${p._id}`, {
+            const response = await axios.delete(`http://localhost:8080/api/feed/post/${p._id}`, {
                 withCredentials: true, headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Bearer ${userToken}`
