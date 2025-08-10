@@ -6,7 +6,7 @@ export const fetchSongs = createAsyncThunk(
     async (_, thunkAPI) => {
         try {
 const token = localStorage.getItem('token')
-            const response = await axios.get("http://localhost:8080/api/music/songs", {
+            const response = await axios.get("https://yibee.onrender.com/api/music/songs", {
                   withCredentials: true,
                   headers: {
                     
@@ -28,7 +28,7 @@ export const fetchGenre = createAsyncThunk(
         try {
 const token = localStorage.getItem('token')
 
-            const response = await axios.get(`http://localhost:8080/api/music/genre/${genre}`, {
+            const response = await axios.get(`https://yibee.onrender.com/api/music/genre/${genre}`, {
                 withCredentials: true,
                   headers: {
                     'Authorization': `Bearer ${token}`
@@ -50,7 +50,7 @@ export const SearchSongs = createAsyncThunk(
         try {
 const token = localStorage.getItem('token')
 
-            const response = await axios.get(`http://localhost:8080/api/music/search/${query}`, {
+            const response = await axios.get(`https://yibee.onrender.com/api/music/search/${query}`, {
                 withCredentials: true,  headers: {
                     'Authorization': `Bearer ${token}`
                 }
